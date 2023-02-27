@@ -27,12 +27,12 @@ gravity_z = ${fparse
   
   [channel]      
     type = FileMeshGenerator
-    file = /home/guschti/COEBELI/COEBELI_modelling/moose_projects/kiliffak/meshes/channel_30k_3unds_6z.e
+    file = /home/guschti/projects/mastodon/meshes/channel_30k_3und.e
   []
 
   [deactivated]      
     type = FileMeshGenerator
-    file = /home/guschti/COEBELI/COEBELI_modelling/moose_projects/kiliffak/meshes/disabled_element.e
+    file = /home/guschti/projects/mastodon/meshes/channel_30k_3und_disabled_element.e
   []
 
   [combined]
