@@ -56,4 +56,4 @@ doc/doxygen/html
 !tests/data/**/*.csv
 
 # Allow input meshes
-!inputs/*.e
+!meshes/*.e
