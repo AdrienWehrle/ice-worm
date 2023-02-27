@@ -54,3 +54,6 @@ doc/doxygen/html
 
 # Allow CSV in data directory
 !tests/data/**/*.csv
+
+# Allow input meshes
+!inputs/*.e
