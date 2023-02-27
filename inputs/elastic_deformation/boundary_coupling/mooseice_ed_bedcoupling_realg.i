@@ -3,7 +3,7 @@
 [Mesh]
   [channel]      
   type = FileMeshGenerator
-  file = /home/guschti/COEBELI/COEBELI_modelling/moose_projects/kiliffak/meshes/canyon_sloped_surface.e
+  file = /home/guschti/projects/mastodon/meshes/channel_10k_1und_ushape.e
   []
 []
 
