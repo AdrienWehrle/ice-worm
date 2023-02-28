@@ -4,10 +4,29 @@
 []
 
 [Mesh]
-  type = FileMesh
-  file = /home/guschti/projects/mastodon/meshes/channel_10k_1und_ushape.e
-  # displacements = 'disp_x disp_y disp_z'
+  type = GeneratedMesh
+  dim = 3
+  xmin = 0
+  xmax = 3.0
+  ymin = 0
+  ymax = 1.0
+  zmin = 0
+  zmax = 3.0
+  nx = 5
+  ny = 5
+  nz = 5
+  elem_type = HEX20
+  # elem_type = QUAD9
+  # displacements = 'velocity_x velocity_y velocity_z'
 []
+
+# [Mesh]
+#   type = FileMesh
+#   file = /home/guschti/projects/mastodon/meshes/channel.e # /home/guschti/projects/mastodon/meshes/channel_10k_1und_ushape.e
+#   # displacements = 'disp_x disp_y disp_z'
+#   second_order=true
+# []
+
 
 [Variables]
   [velocity_x]
@@ -89,6 +108,14 @@
     boundary = 'bottom'
     value = 0.
   []
+  
+  # [Periodic]
+  #   [all]
+  #     variable = 'velocity_x velocity_y velocity_z'
+  #     auto_direction = 'x'
+  #   []
+  # []
+  
 #  [in_flux_boundary_x]
 #    type = DirichletBC
 #    # type = FunctionDirichletBC
@@ -109,6 +136,7 @@
 #    boundary = 'left'
 #    value = 0.
 #  []
+
 []
 
 [Materials]
@@ -117,6 +145,7 @@
     velocity_x = velocity_x
     velocity_y = velocity_y
     velocity_z = velocity_z
+    pressure = pressure
   []
   
 []

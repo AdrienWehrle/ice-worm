@@ -26,7 +26,7 @@ protected:
   MaterialProperty<Real> & _viscosity;
 
   /// Ice damaging
-  MaterialProperty<Real> & _damage;
+  // MaterialProperty<Real> & _damage;
   
   // Velocity gradients
   const VariableGradient & _grad_velocity_x;
@@ -41,9 +41,9 @@ protected:
   const Real & _II_eps_min;
 
   // Damage law parameters
-  const Real & _r;
-  const Real & _B;
-  const Real & _sig_th;
-  const Real & _alpha;
+  // const Real & _r;
+  // const Real & _B;
+  // const Real & _sig_th;
+  // const Real & _alpha;
 
 };

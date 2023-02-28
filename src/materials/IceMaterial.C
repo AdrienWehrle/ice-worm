@@ -1,6 +1,6 @@
 #include "IceMaterial.h"
 
-registerMooseObject("FemisdApp", IceMaterial);
+registerMooseObject("MastodonApp", IceMaterial);
 
 InputParameters
 IceMaterial::validParams()
@@ -17,7 +17,7 @@ IceMaterial::validParams()
   params.addParam<Real>("AGlen", 75., "Fluidity parameter in Glen's flow law");
   params.addParam<Real>("nGlen", 3.,"Glen exponent");  
   params.addParam<Real>("density", 0.915, "Ice density");
-  params.addParam<Real>("damage", 0., "Ice damaging");
+  // params.addParam<Real>("damage", 0., "Ice damaging");
 
   params.addParam<Real>("II_eps_min", 6.17e-6, "Finite strain rate parameter");
   
@@ -51,15 +51,15 @@ IceMaterial::IceMaterial(const InputParameters & parameters)
     _pressure(coupledValue("pressure")),
 
     // Damage law parameters
-    _r(getParam<Real>("r")),
-    _B(getParam<Real>("B")),
-    _sig_th(getParam<Real>("sig_th")),
-    _alpha(getParam<Real>("alpha")),
+    // _r(getParam<Real>("r")),
+    // _B(getParam<Real>("B")),
+    // _sig_th(getParam<Real>("sig_th")),
+    // _alpha(getParam<Real>("alpha")),
 
     // Ice properties created by this object
     _viscosity(declareProperty<Real>("mu")),
-    _density(declareProperty<Real>("rho")),
-    _damage(declareProperty<Real>("damage"))
+    _density(declareProperty<Real>("rho"))
+    // _damage(declareProperty<Real>("damage"))
 {
 }
 
@@ -106,43 +106,43 @@ IceMaterial::computeQpProperties()
 
    // Compute stresses
 
-   // renaming for convenience
-   Real eta = _viscosity[_qp];
-   Real sig_m = _pressure[_qp];
+   // // renaming for convenience
+   // Real eta = _viscosity[_qp];
+   // Real sig_m = _pressure[_qp];
    
-   Real sxx = 2 * eta * u_x + sig_m;
-   Real syy = 2 * eta * v_y + sig_m;
-   Real szz = 2 * eta * w_z + sig_m;
+   // Real sxx = 2 * eta * u_x + sig_m;
+   // Real syy = 2 * eta * v_y + sig_m;
+   // Real szz = 2 * eta * w_z + sig_m;
    
-   Real sxy = eta * (u_y + v_x);
-   Real sxz = eta * (u_z + w_x);
-   Real syz = eta * (v_z + w_y);
+   // Real sxy = eta * (u_y + v_x);
+   // Real sxz = eta * (u_z + w_x);
+   // Real syz = eta * (v_z + w_y);
    
-   Real sxx_dev = 2 * eta * u_x;
-   Real syy_dev = 2 * eta * v_y;
-   Real szz_dev = 2 * eta * w_z;
+   // Real sxx_dev = 2 * eta * u_x;
+   // Real syy_dev = 2 * eta * v_y;
+   // Real szz_dev = 2 * eta * w_z;
 
-   // left term
-   Real lt = (sxx+syy) / 2;
-   // right term containing root
-   Real rt = std::sqrt(pow((sxx-syy) / 2, 2) + sxy*sxy); 
-   Real s1 = lt + rt;
+   // // left term
+   // Real lt = (sxx+syy) / 2;
+   // // right term containing root
+   // Real rt = std::sqrt(pow((sxx-syy) / 2, 2) + sxy*sxy); 
+   // Real s1 = lt + rt;
 
-   // von Mises stress (second invariant)
-   Real sig_e = std::sqrt(3./2. * (sxx_dev*sxx_dev + syy_dev*syy_dev + 2*sxy*sxy));
+   // // von Mises stress (second invariant)
+   // Real sig_e = std::sqrt(3./2. * (sxx_dev*sxx_dev + syy_dev*syy_dev + 2*sxy*sxy));
 
-   // access damage at previous timestep
-   // Real damage_old = damage_old[_qp];
-   Real damage_old = 0.2;
+   // // access damage at previous timestep
+   // // Real damage_old = damage_old[_qp];
+   // Real damage_old = 0.2;
    
-   // stress measure
-   Real Xi = _alpha * sig_e;
+   // // stress measure
+   // Real Xi = _alpha * sig_e;
 
-   // compute damage
-   Real damage_dt = _B * std::pow((Xi/(1.-damage_old)) - _sig_th, _r);
+   // // compute damage
+   // Real damage_dt = _B * std::pow((Xi/(1.-damage_old)) - _sig_th, _r);
     
-   // update damage  
-   _damage[_qp] += _dt * damage_dt;
+   // // update damage  
+   // _damage[_qp] += _dt * damage_dt;
 
    //std::cout << _dt << "   ";
 }
