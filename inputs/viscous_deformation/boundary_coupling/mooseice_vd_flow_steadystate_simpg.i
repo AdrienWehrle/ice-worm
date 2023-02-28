@@ -15,7 +15,8 @@
   nx = 5
   ny = 5
   nz = 5
-  elem_type = HEX20
+  elem_type = HEX8
+  seconder_order = true
   # elem_type = QUAD9
   # displacements = 'velocity_x velocity_y velocity_z'
 []
