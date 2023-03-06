@@ -156,7 +156,7 @@ gravity_z = ${fparse
   #   variable = velocity_y
   #   boundary = 'left'
   #   value = 0.
-  # []
+# []
   # [left_boundary_z]
   #   type = DirichletBC
   #   variable = velocity_z
