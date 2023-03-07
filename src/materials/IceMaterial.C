@@ -15,7 +15,7 @@ IceMaterial::validParams()
   
   // Fluid properties
   params.addParam<Real>("AGlen", 75., "Fluidity parameter in Glen's flow law");
-  params.addParam<Real>("nGlen", 3.,"Glen exponent");  
+  params.addParam<Real>("nGlen", 3.,"Glen exponent");
   params.addParam<Real>("density", 917., "Ice density"); // CHANGED: 0.915
   // params.addParam<Real>("damage", 0., "Ice damaging");
 
