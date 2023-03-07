@@ -4,16 +4,16 @@
 bed_slope = 0
 
 # change coordinate system to add a slope
-# gravity_x = ${fparse
-#   	      - cos((90 - bed_slope) / 180 * pi) * 9.81
-#               }
+gravity_x = ${fparse
+  	      - cos((90 - bed_slope) / 180 * pi) * 9.81
+              }
 
 gravity_z = ${fparse
 	      - cos(bed_slope / 180 * pi) * 9.81
               } 
 
 [GlobalParams]
-  gravity = '0 0 ${gravity_z}' # ${gravity_x}
+  gravity = '${gravity_x} 0 ${gravity_z}'
   integrate_p_by_parts = true
 []
 
@@ -259,13 +259,13 @@ gravity_z = ${fparse
   
 []
 
-[Preconditioning]
-  [SMP_PJFNK]
-    type = SMP
-    full = true
-    solve_type = NEWTON
-  []
-[]
+# [Preconditioning]
+#   [SMP_PJFNK]
+#     type = SMP
+#     full = true
+#     solve_type = NEWTON
+#   []
+# []
 
 # [Executioner]
 #   type = Transient
@@ -300,16 +300,16 @@ gravity_z = ${fparse
 # []
 
 [Executioner]
-  type = Transient
+  type = Steady
   petsc_options = '-ksp_snes_ew'
   petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
   petsc_options_value = 'lu       superlu_dist'
   solve_type = 'NEWTON'
   nl_rel_tol = 1e-3
   nl_abs_tol = 1e-3
-  dt = 1000
-  end_time = 5000.
-  timestep_tolerance = 1e-6
+  # dt = 1000
+  # end_time = 5000.
+  # timestep_tolerance = 1e-6
   automatic_scaling = true
   [TimeIntegrator]
     type = NewmarkBeta
