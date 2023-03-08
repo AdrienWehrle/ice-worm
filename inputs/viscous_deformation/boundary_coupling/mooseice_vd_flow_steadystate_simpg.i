@@ -1,19 +1,19 @@
 # ------------------------ 
 
 # # slope of the bottom boundary (in degrees)
-bed_slope = 0
+# bed_slope = 0.1
 
-# change coordinate system to add a slope
-gravity_x = ${fparse
-  	      - cos((90 - bed_slope) / 180 * pi) * 9.81
-              }
+# # change coordinate system to add a slope
+# gravity_x = ${fparse
+#   	      - cos((90 - bed_slope) / 180 * pi) * 9.81
+#               }
 
-gravity_z = ${fparse
-	      - cos(bed_slope / 180 * pi) * 9.81
-              } 
+# gravity_z = ${fparse
+# 	      - cos(bed_slope / 180 * pi) * 9.81
+#               } 
 
 [GlobalParams]
-  gravity = '${gravity_x} 0 ${gravity_z}'
+  gravity = '0 0 -9.81'
   integrate_p_by_parts = true
 []
 
@@ -52,7 +52,7 @@ gravity_z = ${fparse
 
 [Mesh]
   type = FileMesh
-  file = /home/guschti/projects/mastodon/meshes/simple_channel.e # /home/guschti/projects/mastodon/meshes/channel_10k_1und_ushape.e
+  file = /home/guschti/projects/mastodon/meshes/simple_channel_straight_surface_slope.e # /home/guschti/projects/mastodon/meshes/channel_10k_1und_ushape.e
   # displacements = 'disp_x disp_y disp_z'
   second_order = true
 []
@@ -185,7 +185,7 @@ gravity_z = ${fparse
     type = DirichletBC
     variable = velocity_x
     boundary = 'downstream'
-    value = 0. # 2.7e-4 # 1 m.h-1
+    value = -2.7e-4 # 1 m.h-1
   []
   [downstream_boundary_y]
     type = DirichletBC
@@ -203,7 +203,7 @@ gravity_z = ${fparse
     type = DirichletBC
     variable = velocity_x
     boundary = 'upstream'
-    value = 0. # 1 m.h-1
+    value = 2.7e-4 # 1 m.h-1
   []
   [upstream_boundary_y]
     type = DirichletBC
@@ -307,16 +307,15 @@ gravity_z = ${fparse
   solve_type = 'NEWTON'
   nl_rel_tol = 1e-3
   nl_abs_tol = 1e-3
-  # dt = 1000
-  # end_time = 5000.
-  # timestep_tolerance = 1e-6
   automatic_scaling = true
+  
   [TimeIntegrator]
     type = NewmarkBeta
     beta = 0.25
     gamma = 0.5
     inactive_tsteps = 2
   []
+  
 []
 
 [Outputs]

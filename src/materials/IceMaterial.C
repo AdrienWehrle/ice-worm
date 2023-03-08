@@ -15,7 +15,7 @@ IceMaterial::validParams()
   
   // Fluid properties
   params.addParam<Real>("AGlen", 75., "Fluidity parameter in Glen's flow law");
-  params.addParam<Real>("nGlen", 3.,"Glen exponent");
+  params.addParam<Real>("nGlen", 3.,"Glen exponent"); 
   params.addParam<Real>("density", 917., "Ice density"); // CHANGED: 0.915
   // params.addParam<Real>("damage", 0., "Ice damaging");
 
@@ -99,7 +99,7 @@ IceMaterial::computeQpProperties()
     II_eps = _II_eps_min;
   
   // Compute viscosity  
-  _viscosity[_qp] = 0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.);
+  _viscosity[_qp] = (0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.)); // * 1e3;
    
   // Constant density
   _density[_qp] = _rho;
@@ -139,7 +139,7 @@ IceMaterial::computeQpProperties()
    // Real Xi = _alpha * sig_e;
 
    // // compute damage
-   // Real damage_dt = _B * std::pow((Xi/(1.-damage_old)) - _sig_th, _r);
+   // Real damage_dt = _B * std::pow((Xi/(1.-damage_old)) - _sig_thr);
     
    // // update damage  
    // _damage[_qp] += _dt * damage_dt;
