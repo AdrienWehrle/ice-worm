@@ -83,7 +83,7 @@ IceMaterial::computeQpProperties()
   Real w_y = _grad_velocity_z[_qp](1);
   Real w_z = _grad_velocity_z[_qp](2);
 
-  Real eps_xy = 0.5 * (u_y + v_x);                                                              
+  Real eps_xy = 0.5 * (u_y + v_x);                                                            
   Real eps_xz = 0.5 * (u_z + w_x);
   Real eps_yz = 0.5 * (v_z + w_y); 
 
@@ -99,7 +99,7 @@ IceMaterial::computeQpProperties()
     II_eps = _II_eps_min;
   
   // Compute viscosity  
-  _viscosity[_qp] = (0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.)); // * 1e3;
+  _viscosity[_qp] = (0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.)) * 1e6;
    
   // Constant density
   _density[_qp] = _rho;

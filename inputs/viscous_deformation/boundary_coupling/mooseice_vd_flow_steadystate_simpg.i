@@ -185,7 +185,7 @@
     type = DirichletBC
     variable = velocity_x
     boundary = 'downstream'
-    value = -2.7e-4 # 1 m.h-1
+    value = 1 # 2.7e-4 # 1 m.h-1
   []
   [downstream_boundary_y]
     type = DirichletBC
@@ -203,7 +203,7 @@
     type = DirichletBC
     variable = velocity_x
     boundary = 'upstream'
-    value = 2.7e-4 # 1 m.h-1
+    value = 1 # 2.7e-4 # 1 m.h-1
   []
   [upstream_boundary_y]
     type = DirichletBC
