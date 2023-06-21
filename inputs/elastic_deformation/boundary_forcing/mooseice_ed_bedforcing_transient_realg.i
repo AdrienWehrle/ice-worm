@@ -1,5 +1,3 @@
-# based on mastodon_cogmodel.i, Tinu
-
 [Mesh]
   [channel]
   type = FileMeshGenerator

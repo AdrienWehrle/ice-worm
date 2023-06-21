@@ -1,9 +1,8 @@
-# based on mastodon_cogmodel.i, Tinu
-
 [Mesh]
   [channel]
   type = FileMeshGenerator
-  file = /home/guschti/projects/mastodon/meshes/channel_10k_1und_ushape.e
+    # file = /home/guschti/projects/mastodon/meshes/channel_10k_1und_ushape.e
+    file = /home/guschti/projects/mastodon/meshes/channel_10k_1und_ushape_surfboundary.e
   []
 []
 
