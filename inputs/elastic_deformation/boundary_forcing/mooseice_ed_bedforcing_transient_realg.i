@@ -344,7 +344,7 @@
     function = bed_forcing
     variable = 'disp_x'
     beta = 0.25
-    displacement = 'disp_x'
+    # displacement = 'disp_x'
     velocity = 'vel_x'
     acceleration = 'accel_x'
   []
