@@ -325,7 +325,7 @@
     type = PresetAcceleration
     boundary = 'slip'
     function = bed_forcing
-    variable = 'accel_x'
+    variable = 'disp_x'
     beta = 0.25
     displacement = 'disp_x'
     velocity = 'vel_x'
