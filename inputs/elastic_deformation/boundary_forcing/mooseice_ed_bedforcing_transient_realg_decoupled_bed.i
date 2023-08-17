@@ -301,18 +301,18 @@
     variable = disp_x
     value    = 0.0
   [] 
-  [anchor_bottom_x]
-    type = DirichletBC
-    variable = disp_x
-    boundary = 'bottom'
-    value = 0.0
-  []  
-  [anchor_botom_y]
-    type = DirichletBC
-    variable = disp_y
-    boundary = 'bottom'
-    value = 0.0
-  []
+  # [anchor_bottom_x]
+  #   type = DirichletBC
+  #   variable = disp_x
+  #   boundary = 'bottom'
+  #   value = 0.0
+  # []  
+  # [anchor_botom_y]
+  #   type = DirichletBC
+  #   variable = disp_y
+  #   boundary = 'bottom'
+  #   value = 0.0
+  # []
   [anchor_bottom_z]
     type = DirichletBC
     variable = disp_z
@@ -347,12 +347,12 @@
     displacement = 'disp_x'
     velocity = 'vel_x'
   []
-  [anchor_botom_y_slip]
-    type = DirichletBC
-    variable = disp_y
-    boundary = 'slip'
-    value = 0.0
-  []
+  # [anchor_botom_y_slip]
+  #   type = DirichletBC
+  #   variable = disp_y
+  #   boundary = 'slip'
+  #   value = 0.0
+  # []
   [anchor_bottom_z_slip]
     type = DirichletBC
     variable = disp_z
@@ -374,7 +374,6 @@
     set_sync_times = true
     execute_on = 'timestep_begin timestep_end'
   []
-
 []
 
 [Preconditioning]

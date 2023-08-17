@@ -320,24 +320,24 @@
     value = 0.0
   []
 
-  [anchor_sides_x]
-    type = DirichletBC
-    variable = disp_x
-    boundary = 'left right'
-    value = 0.0
-  []
+  # [anchor_sides_x]
+  #   type = DirichletBC
+  #   variable = disp_x
+  #   boundary = 'left right'
+  #   value = 0.0
+  # []
   [anchor_sides_y]
     type = DirichletBC
     variable = disp_y
     boundary = 'left right'
     value = 0.
   []
-  [anchor_sides_z]
-    type = DirichletBC
-    variable = disp_z
-    boundary = 'left right'
-    value = 0.0
-  []
+  # [anchor_sides_z]
+  #   type = DirichletBC
+  #   variable = disp_z
+  #   boundary = 'left right'
+  #   value = 0.0
+  # []
   [anchor_bottom_x_slip]
     type = PresetAcceleration
     boundary = 'slip'

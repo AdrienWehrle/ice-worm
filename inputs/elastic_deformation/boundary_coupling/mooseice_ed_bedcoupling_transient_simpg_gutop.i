@@ -1,8 +1,9 @@
+# based on mastodon_cogmodel.i, Tinu
+
 [Mesh]
   [channel]
   type = FileMeshGenerator
-    # file = /home/guschti/projects/mastodon/meshes/channel_10k_1und_ushape_surfboundary_05.e
-   file = /home/adrien/COEBELI/projects/mastodon/meshes/channel_10k_1und_ushape_surfboundary.e
+  file = /home/adrien/COEBELI/projects/mastodon/meshes/channel_10k_1und_ushape.e
   []
 []
 
@@ -88,12 +89,6 @@
   [ocean_pressure]
     type = ParsedFunction
     value = '8829*(1000-z)'   
-  []
-  [bed_forcing]
-    type = PiecewiseLinear
-    data_file = Ormsby_USE1_shift_t01.csv
-    # data_file = Ormsby_USE1_shift_t01_total_abs_disp_20cm.csv
-    format = 'columns'
   []
 []
 
@@ -339,14 +334,11 @@
     value = 0.0
   []
   [anchor_bottom_x_slip]
-    type = PresetAcceleration
+    type = DirichletBC
+    variable = disp_x
     boundary = 'slip'
-    function = bed_forcing
-    variable = 'accel_x'
-    beta = 0.25
-    displacement = 'disp_x'
-    velocity = 'vel_x'
-  []
+    value = 0.0
+  []  
   [anchor_botom_y_slip]
     type = DirichletBC
     variable = disp_y
@@ -375,6 +367,15 @@
     execute_on = 'timestep_begin timestep_end'
   []
 
+  [bed_release]
+    type = TimePeriod
+    start_time = 0.1
+    end_time = 20
+    disable_objects = 'BCs::anchor_bottom_x_slip'
+    set_sync_times = true
+    execute_on = 'timestep_begin timestep_end'
+  []
+
 []
 
 [Preconditioning]
@@ -392,8 +393,8 @@
   solve_type = 'NEWTON'
   nl_rel_tol = 1e-7
   nl_abs_tol = 1e-12
-  dt = 0.01
-  end_time = 10.
+  dt = 0.02
+  end_time = 1.
   timestep_tolerance = 1e-6
   automatic_scaling = true
   [TimeIntegrator]
