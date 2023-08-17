@@ -315,7 +315,7 @@
     value = 0.0
   []
   [anchor_bottom_x_slip]
-    type = PresetAcceleration
+    type = PresetDisplacement
     boundary = 'slip'
     function = bed_forcing
     variable = 'disp_x'
