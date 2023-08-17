@@ -117,7 +117,6 @@
     stiffness_damping_coefficient = 0.02
     mass_damping_coefficient = 0.02
     displacements = 'disp_x disp_y disp_z'
-    accelerations = 'accel_x accel_y accel_z'
     static_initialization = true
   []
   [inertia_x]
