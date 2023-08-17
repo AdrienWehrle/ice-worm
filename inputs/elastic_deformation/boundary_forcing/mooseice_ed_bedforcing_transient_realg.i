@@ -23,20 +23,26 @@
     order = FIRST
     family = LAGRANGE
   []
+  [accel_x]
+    order = FIRST
+    family = LAGRANGE
+  []
+  [accel_y]
+    order = FIRST
+    family = LAGRANGE
+  []
+  [accel_z]
+    order = FIRST
+    family = LAGRANGE
+  []
 []
 
 [AuxVariables]
   [vel_x]
   []
-  [accel_x]
-  []
   [vel_y]
   []
-  [accel_y]
-  []
   [vel_z]
-  []
-  [accel_z]
   []
   [stress_xx]
     order = CONSTANT
@@ -146,14 +152,6 @@
 []
 
 [AuxKernels]
-  [accel_x]
-    type = NewmarkAccelAux
-    variable = accel_x
-    displacement = disp_x
-    velocity = vel_x
-    beta = 0.25
-    execute_on = timestep_end
-  []
   [vel_x]
     type = NewmarkVelAux
     variable = vel_x
@@ -161,27 +159,11 @@
     gamma = 0.5
     execute_on = timestep_end
   []
-  [accel_y]
-    type = NewmarkAccelAux
-    variable = accel_y
-    displacement = disp_y
-    velocity = vel_y
-    beta = 0.25
-    execute_on = timestep_end
-  []
   [vel_y]
     type = NewmarkVelAux
     variable = vel_y
     acceleration = accel_y
     gamma = 0.5
-    execute_on = timestep_end
-  []
-  [accel_z]
-    type = NewmarkAccelAux
-    variable = accel_z
-    displacement = disp_z
-    velocity = vel_z
-    beta = 0.25
     execute_on = timestep_end
   []
   [vel_z]
