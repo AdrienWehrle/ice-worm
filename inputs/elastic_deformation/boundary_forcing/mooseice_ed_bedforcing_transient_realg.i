@@ -23,26 +23,20 @@
     order = FIRST
     family = LAGRANGE
   []
-  [accel_x]
-    order = FIRST
-    family = LAGRANGE
-  []
-  [accel_y]
-    order = FIRST
-    family = LAGRANGE
-  []
-  [accel_z]
-    order = FIRST
-    family = LAGRANGE
-  []
 []
 
 [AuxVariables]
   [vel_x]
   []
+  [accel_x]
+  []
   [vel_y]
   []
+  [accel_y]
+  []
   [vel_z]
+  []
+  [accel_z]
   []
   [stress_xx]
     order = CONSTANT
