@@ -1,8 +1,8 @@
 [Mesh]
   [channel]
   type = FileMeshGenerator
-    # file = /home/guschti/projects/mastodon/meshes/channel_10k_1und_ushape_surfboundary_05.e
-   file = /home/adrien/COEBELI/projects/mastodon/meshes/channel_10k_1und_ushape_surfboundary.e
+    file = /home/guschti/projects/mastodon/meshes/channel_10k_1und_ushape_surfboundary.e
+   # file = /home/adrien/COEBELI/projects/mastodon/meshes/channel_10k_1und_ushape_surfboundary.e
   []
 []
 
@@ -319,7 +319,6 @@
     boundary = 'bottom'
     value = 0.0
   []
-
   # [anchor_sides_x]
   #   type = DirichletBC
   #   variable = disp_x
@@ -342,10 +341,11 @@
     type = PresetAcceleration
     boundary = 'slip'
     function = bed_forcing
-    variable = 'accel_x'
+    variable = 'disp_x'
     beta = 0.25
-    displacement = 'disp_x'
+    # displacement = 'disp_x'
     velocity = 'vel_x'
+    acceleration = 'accel_x'
   []
   [anchor_botom_y_slip]
     type = DirichletBC
