@@ -85,7 +85,7 @@
     type = ParsedFunction
     value = '0'
   []
-  [ocean_pressure]
+  [oceanp_ressure]
     type = ParsedFunction
     value = '8829*(1000-z)'   
   []
