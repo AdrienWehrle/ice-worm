@@ -340,11 +340,11 @@
   [anchor_bottom_x_slip]
     type = PresetVelocity
     boundary = 'slip'
-    function = bed_forcing
+    # function = bed_forcing
     variable = 'disp_x'
     beta = 0.25
     # displacement = 'disp_x'
-    velocity = vel_x
+    velocity = bed_forcing
     acceleration = 'accel_x'
   []
   [anchor_botom_y_slip]
