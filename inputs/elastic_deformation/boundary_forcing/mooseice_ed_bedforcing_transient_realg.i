@@ -344,7 +344,7 @@
     variable = 'disp_x'
     beta = 0.25
     # displacement = 'disp_x'
-    velocity = 'vel_x'
+    velocity = vel_x
     acceleration = 'accel_x'
   []
   [anchor_botom_y_slip]
