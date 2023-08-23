@@ -91,7 +91,7 @@
   []
   [bed_forcing]
     type = PiecewiseLinear
-    data_file = Ormsby_USE1_shift_t01_velocity_1cm_total_disp.csv
+    data_file = Ormsby_USE1_shift_t01_displacement_1cm.csv
     format = 'columns'
   []
 []
@@ -338,13 +338,13 @@
     value = 0.0
   []
   [anchor_bottom_x_slip]
-    type = PresetVelocity
+    type = PresetDisplacement
     boundary = 'slip'
-    # function = bed_forcing
+    function = bed_forcing
     variable = 'disp_x'
     beta = 0.25
     # displacement = 'disp_x'
-    velocity = bed_forcing
+    velocity = 'vel_x'
     acceleration = 'accel_x'
   []
   [anchor_botom_y_slip]
