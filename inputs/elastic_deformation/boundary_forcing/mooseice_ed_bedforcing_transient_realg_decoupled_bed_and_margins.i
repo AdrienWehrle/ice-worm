@@ -91,8 +91,7 @@
   []
   [bed_forcing]
     type = PiecewiseLinear
-    data_file = Ormsby_USE1_shift_t01.csv
-    # data_file = Ormsby_USE1_shift_t01_total_abs_disp_20cm.csv
+    data_file = Ormsby_USE1_shift_t01_displacement_1cm.csv
     format = 'columns'
   []
 []
@@ -319,7 +318,6 @@
     boundary = 'bottom'
     value = 0.0
   []
-
   # [anchor_sides_x]
   #   type = DirichletBC
   #   variable = disp_x
@@ -339,7 +337,7 @@
   #   value = 0.0
   # []
   [anchor_bottom_x_slip]
-    type = PresetAcceleration
+    type = PresetDisplacement
     boundary = 'slip'
     function = bed_forcing
     variable = 'disp_x'
