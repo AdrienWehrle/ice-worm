@@ -291,25 +291,39 @@
 #   # []
 # []
 
+
+[Contact]
+  [bottom_interface]
+    primary = "bottom"
+    secondary = "top"
+    model = coulomb
+    formulation = penalty
+    normalize_penalty = true
+    friction_coefficient = 0.5
+    penalty = 8e6
+    tangential_tolerance = 0.005
+  []
+[]
+
 [Executioner]
-  type = Steady
+  type = Transient
   petsc_options = '-ksp_snes_ew'
   petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
   petsc_options_value = 'lu       superlu_dist'
   solve_type = 'NEWTON'
-  nl_rel_tol = 1e-3
-  nl_abs_tol = 1e-3
+  nl_rel_tol = 1e-7
+  nl_abs_tol = 1e-12
+  dt = 86400 # one day in seconds
+  end_time = 864000 # 10 days in seconds
+  timestep_tolerance = 1e-6
   automatic_scaling = true
-  
   [TimeIntegrator]
     type = NewmarkBeta
     beta = 0.25
     gamma = 0.5
     inactive_tsteps = 2
   []
-  
 []
-
 
 [Outputs]
   interval = 1
