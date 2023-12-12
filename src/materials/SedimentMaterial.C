@@ -16,7 +16,8 @@ SedimentMaterial::validParams()
   // Solid properties
   // https://tc.copernicus.org/articles/14/261/2020/
   params.addParam<Real>("density", 1850., "Sediment density"); // kgm-3
-
+  params.addParam<Real>("II_eps_min", 6.17e-6, "Finite strain rate parameter"); // a-1
+  
   // Friction properties
   params.addParam<Real>("FrictionCoefficient", 0.1, "Sediment friction coefficient");
   
@@ -37,6 +38,9 @@ SedimentMaterial::SedimentMaterial(const InputParameters & parameters)
     _grad_velocity_y(coupledGradient("velocity_y")),
     _grad_velocity_z(coupledGradient("velocity_z")),
 
+    // Finite strain rate parameter
+    _II_eps_min(getParam<Real>("II_eps_min")),
+    
     // Mean stress
     _pressure(coupledValue("pressure")),
 
@@ -75,9 +79,12 @@ SedimentMaterial::computeQpProperties()
 		      2. * (eps_xy*eps_xy + eps_xz*eps_xz + eps_yz*eps_yz) );
   
   // Compute viscosity
-  _viscosity[_qp] = (_FrictionCoefficient * sig_m) / std::abs(II_eps); // Pa s
-  
-  // std::cout << "VISCOSITY  " << _viscosity[_qp] << std::endl; // should be around 10^12 Pa s
+  // _viscosity[_qp] = (_FrictionCoefficient * sig_m) / std::abs(II_eps); // Pa s
+
+  // if (_t == 864000)
+  _viscosity[_qp] = 1e4 * 1e6 * 3.15576e7 / 1e6; // Pa s
+    
+  // std::cout << "VISCOSITY  " << sig_m << "   " << _FrictionCoefficient << "   " << II_eps << "   " << _viscosity[_qp] << std::endl; // should be around 10^12 Pa s
    
   // Constant density
   _density[_qp] = _rho;

@@ -14,12 +14,12 @@ IceMaterial::validParams()
   params.addRequiredCoupledVar("pressure", "Mean stress");
   
   // Fluid properties
-  params.addParam<Real>("AGlen", 75., "Fluidity parameter in Glen's flow law");
-  params.addParam<Real>("nGlen", 3.,"Glen exponent"); 
-  params.addParam<Real>("density", 917., "Ice density"); // CHANGED: 0.915
+  params.addParam<Real>("AGlen", 75., "Fluidity parameter in Glen's flow law"); // MPa-3a-1
+  params.addParam<Real>("nGlen", 3.,"Glen exponent"); // 
+  params.addParam<Real>("density", 917., "Ice density"); // kgm-3
   // params.addParam<Real>("damage", 0., "Ice damaging");
 
-  params.addParam<Real>("II_eps_min", 6.17e-6, "Finite strain rate parameter");
+  params.addParam<Real>("II_eps_min", 6.17e-6, "Finite strain rate parameter"); // a-1
   
   // Damage law parameters
   params.addParam<Real>("r", 0.43, "Damage law exponent");
@@ -90,17 +90,25 @@ IceMaterial::computeQpProperties()
   // Compute effective strain rate (3D)
   Real II_eps = 0.5*( u_x*u_x + v_y*v_y + w_z*w_z +
 		      2. * (eps_xy*eps_xy + eps_xz*eps_xz + eps_yz*eps_yz) );
-  
-  // Compute effective strain rate (2D)
-  // Real II_eps = 0.5 * ( u_x * u_x + v_y * v_y
-  // 			+ 2 * (eps_xy * eps_xy) );
 
-  if (II_eps < _II_eps_min)
-    II_eps = _II_eps_min;
+  // if (II_eps < _II_eps_min)
+  //   II_eps = _II_eps_min;
   
-  // Compute viscosity  
-  _viscosity[_qp] = (0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.)) * 1e6;
-   
+  // Compute viscosity
+  
+  //_viscosity[_qp] = (0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.)) * 1e6; // MPa a
+
+  
+  _viscosity[_qp] = (0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.)) * 3.15576e13 / 1e6; // 3.15576e13; // Pa s, ~ 2e14 at the beginning... (1e6 * 3.15576e7)
+
+  if (_t <= 864000) // * 3
+    _viscosity[_qp] = 10e12;
+  
+  
+  std::cout << _pressure[_qp] << "  VISCOSITY  " << _viscosity[_qp] << " " << II_eps << std::endl; // should be around 10^12 Pa s
+
+  // std::cout << _t << std::endl;
+  
   // Constant density
   _density[_qp] = _rho;
 
