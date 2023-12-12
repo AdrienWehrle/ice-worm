@@ -31,6 +31,9 @@ protected:
   const VariableGradient & _grad_velocity_z;
   const VariableValue & _pressure;
 
+  // Effective strain rate
+  const Real & _II_eps_min;
+  
   // Friction properties
   const Real & _FrictionCoefficient;
 
