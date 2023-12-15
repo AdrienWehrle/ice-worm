@@ -19,7 +19,7 @@ SedimentMaterial::validParams()
   params.addParam<Real>("II_eps_min", 6.17e-6, "Finite strain rate parameter"); // a-1
   
   // Friction properties
-  params.addParam<Real>("FrictionCoefficient", 0.1, "Sediment friction coefficient");
+  params.addParam<Real>("FrictionCoefficient", 1.0, "Sediment friction coefficient");
   
   return params;
 }
@@ -54,6 +54,9 @@ void
 SedimentMaterial::computeQpProperties()
 {
 
+  // Constant density
+  _density[_qp] = _rho;
+
   // Get current velocity gradients at quadrature point
   Real u_x = _grad_velocity_x[_qp](0);
   Real u_y = _grad_velocity_x[_qp](1);
@@ -75,18 +78,38 @@ SedimentMaterial::computeQpProperties()
   Real sig_m = _pressure[_qp];
   
   // Compute effective strain rate
-  Real II_eps = 0.5*( u_x*u_x + v_y*v_y + w_z*w_z +
-		      2. * (eps_xy*eps_xy + eps_xz*eps_xz + eps_yz*eps_yz) );
+  // Real II_eps = 0.5*( u_x*u_x + v_y*v_y + w_z*w_z +
+  // 		      2. * (eps_xy*eps_xy + eps_xz*eps_xz + eps_yz*eps_yz) );
+
+  Real eta = _viscosity[_qp];
+  
+  Real sxx = 2 * eta * u_x + sig_m;
+  Real syy = 2 * eta * v_y + sig_m;
+  Real szz = 2 * eta * w_z + sig_m;
+  
+  Real sxy = eta * (u_y + v_x);
+  Real sxz = eta * (u_z + w_x);
+  Real syz = eta * (v_z + w_y);
+  
+  Real sxx_dev = 2 * eta * u_x;
+  Real syy_dev = 2 * eta * v_y;
+  Real szz_dev = 2 * eta * w_z;
+  
+  // left term
+  Real lt = (sxx+syy) / 2;
+  // right term containing root
+  Real rt = std::sqrt(pow((sxx-syy) / 2, 2) + sxy*sxy); 
+  Real s1 = lt + rt;
+  
+  // von Mises stress (second invariant)
+  Real sig_e = std::sqrt(3./2. * (sxx_dev*sxx_dev + syy_dev*syy_dev + 2*sxy*sxy));
   
   // Compute viscosity
-  // _viscosity[_qp] = (_FrictionCoefficient * sig_m) / std::abs(II_eps); // Pa s
+  _viscosity[_qp] = (_FrictionCoefficient * sig_m) / std::abs(sig_e); // Pa s
 
-  // if (_t == 864000)
-  _viscosity[_qp] = 1e4 * 1e6 * 3.15576e7 / 1e6; // Pa s
-    
-  // std::cout << "VISCOSITY  " << sig_m << "   " << _FrictionCoefficient << "   " << II_eps << "   " << _viscosity[_qp] << std::endl; // should be around 10^12 Pa s
-   
-  // Constant density
-  _density[_qp] = _rho;
+  if (_t == 864000)
+    _viscosity[_qp] = 1e4 * 1e6 * 3.15576e7 / 1e6; // Pa s
+  
+  std::cout << "VISCOSITY  " <<  _viscosity[_qp] << std::endl;
   
 }
