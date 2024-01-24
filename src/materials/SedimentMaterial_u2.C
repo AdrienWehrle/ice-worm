@@ -1,9 +1,9 @@
-#include "SedimentMaterial.h"
+#include "SedimentMaterial_u2.h"
 
-registerMooseObject("MastodonApp", SedimentMaterial);
+registerMooseObject("MastodonApp", SedimentMaterial_u2);
 
 InputParameters
-SedimentMaterial::validParams()
+SedimentMaterial_u2::validParams()
 {
   InputParameters params = Material::validParams();
 
@@ -24,7 +24,7 @@ SedimentMaterial::validParams()
   return params;
 }
 
-SedimentMaterial::SedimentMaterial(const InputParameters & parameters)
+SedimentMaterial_u2::SedimentMaterial_u2(const InputParameters & parameters)
   : Material(parameters),
   
     // Sediment density
@@ -51,7 +51,7 @@ SedimentMaterial::SedimentMaterial(const InputParameters & parameters)
 }
 
 void
-SedimentMaterial::computeQpProperties()
+SedimentMaterial_u2::computeQpProperties()
 {
 
   // Constant density
@@ -113,7 +113,7 @@ SedimentMaterial::computeQpProperties()
   //  1 pascal * second = 3.16887646 × 10-8 pascals * year
   // 10^12 Pa s = 31 688.7646 Pa * year = 0.0316887646 MPa * year
   
-  _viscosity[_qp] = 0.03 // ~ 10^12 Pa s
+  _viscosity[_qp] = 0.03; // ~ 10^12 Pa s
     
   std::cout << "VISCOSITY  " <<  _viscosity[_qp] << std::endl;
   

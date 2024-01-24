@@ -1,9 +1,9 @@
-#include "IceMaterial.h"
+#include "IceMaterial_u2.h"
 
-registerMooseObject("MastodonApp", IceMaterial);
+registerMooseObject("MastodonApp", IceMaterial_u2);
 
 InputParameters
-IceMaterial::validParams()
+IceMaterial_u2::validParams()
 {
   InputParameters params = Material::validParams();
 
@@ -30,7 +30,7 @@ IceMaterial::validParams()
   return params;
 }
 
-IceMaterial::IceMaterial(const InputParameters & parameters)
+IceMaterial_u2::IceMaterial_u2(const InputParameters & parameters)
   : Material(parameters),
 
     // Glen parameters
@@ -64,7 +64,7 @@ IceMaterial::IceMaterial(const InputParameters & parameters)
 }
 
 void
-IceMaterial::computeQpProperties()
+IceMaterial_u2::computeQpProperties()
 {
 
   // Wrap term with Glen's fluidity parameter for clarity
