@@ -7,7 +7,7 @@
 
 [Mesh]
   type = FileMesh
-  file = /home/adrien/COEBELI/projects/mastodon/meshes/mesh_bc.e
+  file = /home/adrien/COEBELI/projects/mastodon/meshes/mesh_ac_lowerres.e
   # displacements = 'disp_x disp_y disp_z'
   second_order = true
 []
@@ -91,24 +91,6 @@
     displacements = 'velocity_x velocity_y velocity_z'
     []
   []
-  # [bottom_boundary_x]
-  #   type = DirichletBC
-  #   variable = velocity_x
-  #   boundary = 'bottom'
-  #   value = 0.
-  # []
-  # [bottom_boundary_y]
-  #   type = DirichletBC
-  #   variable = velocity_y
-  #   boundary = 'bottom'
-  #   value = 0.
-  # []
-  # [bottom_boundary_z]
-  #   type = DirichletBC
-  #   variable = velocity_z
-  #   boundary = 'bottom'
-  #   value = 0.
-  # []
   [sediment_boundary_x]
     type = DirichletBC
     variable = velocity_x
@@ -199,12 +181,6 @@
     boundary = 'right_sediment'
     value = 0.
   []
-  # [downstream_boundary_x]
-  #   type = DirichletBC
-  #   variable = velocity_x
-  #   boundary = 'downstream'
-  #   value = -0.0000002 # 2.7e-4 # 1 m.h-1
-  # []
   [downstream_boundary_y]
     type = DirichletBC
     variable = velocity_y
@@ -221,7 +197,7 @@
     type = DirichletBC
     variable = velocity_x
     boundary = 'upstream'
-    value = 5.6e-5 # 0.2 m.h-1
+    value = 1000. # 1000 = ~0.11 m.h-1
   []
   [upstream_boundary_y]
     type = DirichletBC
@@ -253,58 +229,29 @@
     boundary = 'upstream_sediment'
     value = 0.
   []
-  # [downstream_sediment_boundary_x]
-  #   type = DirichletBC
-  #   variable = velocity_x
-  #   boundary = 'downstream_sediment'
-  #   value = 0.
-  # []
-  # [downstream_sediment_boundary_y]
-  #   type = DirichletBC
-  #   variable = velocity_y
-  #   boundary = 'downstream_sediment'
-  #   value = 0.
-  # []
-  # [downstream_sediment_boundary_z]
-  #   type = DirichletBC
-  #   variable = velocity_z
-  #   boundary = 'downstream_sediment'
-  #   value = 0.
-  # []
-
-  # [Periodic]
-  #   [all]
-  #     variable = 'velocity_x velocity_y velocity_z'
-  #     auto_direction = 'x'
-  #   []
-  # []
-  
- # [in_flux_boundary_x]
- #   type = DirichletBC
- #   # type = FunctionDirichletBC
- #   variable = velocity_x
- #   boundary = 'upstream'
- #   # function = 'inlet_func'
- #   value = 100.
- # []
- # [in_flux_boundary_y]
-#    type = DirichletBC
-#    variable = velocity_y
-#    boundary = 'left'
-#    value = 0.
-#  []
-#  [in_flux_boundary_z]
-#    type = DirichletBC
-#    variable = velocity_z
-#    boundary = 'left'
-#    value = 0.
-#  []
-
+  [downstream_sediment_boundary_x]
+    type = DirichletBC
+    variable = velocity_x
+    boundary = 'downstream_sediment'
+    value = 0.
+  []
+  [downstream_sediment_boundary_y]
+    type = DirichletBC
+    variable = velocity_y
+    boundary = 'downstream_sediment'
+    value = 0.
+  []
+  [downstream_sediment_boundary_z]
+    type = DirichletBC
+    variable = velocity_z
+    boundary = 'downstream_sediment'
+    value = 0.
+  []
 []
 
 [Materials]
   [ice]
-    type = IceMaterial
+    type = IceMaterial_u2
     block = 'eleblock1 eleblock2'
     velocity_x = velocity_x
     velocity_y = velocity_y
@@ -312,7 +259,7 @@
     pressure = pressure
   []
   [base]
-    type = SedimentMaterial
+    type = SedimentMaterial_u2
     block = 'eleblock3'
     velocity_x = velocity_x
     velocity_y = velocity_y
@@ -321,18 +268,6 @@
     FrictionCoefficient=0.1
   []
 []
-
-# [Controls]
-#   [inertia_switch]
-#     type = TimePeriod
-#     start_time = 0.0
-#     end_time = 1728000
-#     # disable_objects = 'Kernel::x_momentum_space Kernel::y_momentum_space Kernel::z_momentum_space'
-#     # disable_objects = 'Kernel::mass'
-#     set_sync_times = true
-#     execute_on = 'timestep_begin timestep_end'
-#   []
-# []
 
 [Preconditioning]
   [andy]
@@ -348,9 +283,9 @@
   petsc_options_value = 'lu       superlu_dist'
   solve_type = 'NEWTON'
   # nl_rel_tol = 1e-7
-  nl_rel_tol = 1e-4
+  nl_rel_tol = 1e-3
   # nl_abs_tol = 1e-12
-  nl_abs_tol = 1e-4
+  nl_abs_tol = 1e-3
   dt = 0.001 # in y, 0.001y ~= 9h
   end_time = 0.005 # in year, 0.005y ~= 44h
   timestep_tolerance = 1e-6
@@ -363,7 +298,7 @@
   []
   # [TimeStepper]
   #   type = IterationAdaptiveDT
-  #   dt = 864000
+  #   dt = 0.001 # in y, 0.001y ~= 9h
   #   optimal_iterations = 10
   # []
 []
@@ -382,19 +317,18 @@
   [ocean_pressure]
     type = ParsedFunction
     value = 'if(z < 0, -1028 * 9.81 * z * 1.e-6, 0)'
-    # value = '1028 * 9.81 * (2212.97-z) / 1e6'   
   []
   [weight]
     type = ParsedFunction
-    value = '917 * 9.81 * (100-z) / 1e6'
+    value = '917 * 9.81 * (100-z) * 1e-6'
   []
   
 []
 
-[ICs]
-  [pressure_weight]
-    type = FunctionIC
-    variable = 'pressure'
-    function = weight
-  []
-[]
+# [ICs]
+#   [pressure_weight]
+#     type = FunctionIC
+#     variable = 'pressure'
+#     function = weight
+#   []
+# []
