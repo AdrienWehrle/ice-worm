@@ -7,12 +7,52 @@
   integrate_p_by_parts = true
 []
 
+<<<<<<< HEAD
+=======
+# [Mesh]
+#   type = GeneratedMesh
+#   dim = 3
+#   xmin = 0
+#   xmax = 10000.0
+#   ymin = 0
+#   ymax = 3000.0
+#   zmin = 0
+#   zmax = 1000.0
+#   nx = 12
+#   ny = 5
+#   nz = 10
+#   elem_type = HEX20
+#   # elem_type = QUAD9
+#   # displacements = 'velocity_x velocity_y velocity_z'
+# []
+
+# [Mesh]
+#   type = GeneratedMesh
+#   dim = 3
+#   xmin = 0
+#   xmax = 3.0
+#   ymin = 0
+#   ymax = 1.0
+#   zmin = 0
+#   zmax = 3.0
+#   nx = 5
+#   ny = 5
+#   nz = 5
+#   elem_type = HEX20
+#   # displacements = 'velocity_x velocity_y velocity_z'
+# []
+
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
 [Mesh]
   type = FileMesh
   # file = /home/guschti/projects/mastodon/meshes/simple_channel_straight_surface_slope.e
   file = /home/adrien/COEBELI/projects/mastodon/meshes/simple_channel_straight_surface_slope.e
   # file = /home/adrien/COEBELI/projects/mastodon/meshes/channel_10k_1und_ushape.e
+<<<<<<< HEAD
   # displacements = 'disp_x disp_y disp_z'
+=======
+  displacements = 'disp_x disp_y disp_z'
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   second_order = true
 []
 
@@ -44,7 +84,11 @@
     v = velocity_y
     w = velocity_z
     pressure = pressure
+<<<<<<< HEAD
     use_displaced_mesh = true
+=======
+    # use_displaced_mesh = true
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   []
   [x_momentum_space]
     type = INSMomentumLaplaceForm
@@ -54,7 +98,11 @@
     w = velocity_z
     pressure = pressure
     component = 0
+<<<<<<< HEAD
     use_displaced_mesh = true
+=======
+    # use_displaced_mesh = true
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   []
   [y_momentum_space]
     type = INSMomentumLaplaceForm
@@ -64,7 +112,11 @@
     w = velocity_z
     pressure = pressure
     component = 1
+<<<<<<< HEAD
     use_displaced_mesh = true
+=======
+    # use_displaced_mesh = true
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   []
   [z_momentum_space]
     type = INSMomentumLaplaceForm
@@ -74,7 +126,11 @@
     w = velocity_z
     pressure = pressure
     component = 2
+<<<<<<< HEAD
     use_displaced_mesh = true
+=======
+    # use_displaced_mesh = true
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   []
 []
 
@@ -262,7 +318,11 @@
 [Contact]
   [bottom_interface]
     primary = "bottom"
+<<<<<<< HEAD
     secondary = "bottom"
+=======
+    secondary = "top"
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
     model = coulomb
     formulation = penalty
     normalize_penalty = true

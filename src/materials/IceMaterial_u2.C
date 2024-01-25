@@ -19,8 +19,17 @@ IceMaterial_u2::validParams()
   params.addParam<Real>("density", 917., "Ice density"); // kgm-3
   // params.addParam<Real>("damage", 0., "Ice damaging");
 
+<<<<<<< HEAD
   // params.addParam<Real>("II_eps_min", 6.17e-6, "Finite strain rate parameter"); // a-1
   params.addParam<Real>("II_eps_min", 5.98e-6, "Finite strain rate parameter"); // a-1
+=======
+<<<<<<< HEAD
+  // params.addParam<Real>("II_eps_min", 6.17e-6, "Finite strain rate parameter"); // a-1
+  params.addParam<Real>("II_eps_min", 5.98e-6, "Finite strain rate parameter"); // a-1
+=======
+  params.addParam<Real>("II_eps_min", 6.17e-6, "Finite strain rate parameter"); // a-1
+>>>>>>> 0cc4ee79c3f712d717b7dd0eb216d6d2283c81c1
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   
   // Damage law parameters
   params.addParam<Real>("r", 0.43, "Damage law exponent");
@@ -92,6 +101,10 @@ IceMaterial_u2::computeQpProperties()
   Real II_eps = 0.5*( u_x*u_x + v_y*v_y + w_z*w_z +
 		      2. * (eps_xy*eps_xy + eps_xz*eps_xz + eps_yz*eps_yz) );
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   // Finite strain rate parameter included to avoid infinite viscosity at low stresses
   if (II_eps < _II_eps_min)
     II_eps = _II_eps_min;
@@ -106,4 +119,72 @@ IceMaterial_u2::computeQpProperties()
   // Constant density
   _density[_qp] = _rho;
      
+<<<<<<< HEAD
+=======
+=======
+  // if (II_eps < _II_eps_min)
+  //   II_eps = _II_eps_min;
+  
+  // Compute viscosity
+  
+  //_viscosity[_qp] = (0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.)) * 1e6; // MPa a
+  
+  _viscosity[_qp] = (0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.)); // MPay
+
+  // if (_t <= 864000) // * 3
+  //   _viscosity[_qp] = 10e12;
+  
+  
+  // std::cout << _pressure[_qp] << "  VISCOSITY  " << _viscosity[_qp] << " " << II_eps << std::endl;   // ~ 10^12 Pa s = 0.03 MPa a
+
+  // std::cout << _t << std::endl;
+  
+  // Constant density
+  _density[_qp] = _rho;
+
+   // Compute stresses
+
+   // // renaming for convenience
+   // Real eta = _viscosity[_qp];
+   // Real sig_m = _pressure[_qp];
+   
+   // Real sxx = 2 * eta * u_x + sig_m;
+   // Real syy = 2 * eta * v_y + sig_m;
+   // Real szz = 2 * eta * w_z + sig_m;
+   
+   // Real sxy = eta * (u_y + v_x);
+   // Real sxz = eta * (u_z + w_x);
+   // Real syz = eta * (v_z + w_y);
+   
+   // Real sxx_dev = 2 * eta * u_x;
+   // Real syy_dev = 2 * eta * v_y;
+   // Real szz_dev = 2 * eta * w_z;
+
+   // // left term
+   // Real lt = (sxx+syy) / 2;
+   // // right term containing root
+   // Real rt = std::sqrt(pow((sxx-syy) / 2, 2) + sxy*sxy); 
+   // Real s1 = lt + rt;
+
+   // // von Mises stress (second invariant)
+   // Real sig_e = std::sqrt(3./2. * (sxx_dev*sxx_dev + syy_dev*syy_dev + 2*sxy*sxy));
+
+   // // access damage at previous timestep
+   // // Real damage_old = damage_old[_qp];
+   // Real damage_old = 0.2;
+   
+   // // stress measure
+   // Real Xi = _alpha * sig_e;
+
+   // // compute damage
+   // Real damage_dt = _B * std::pow((Xi/(1.-damage_old)) - _sig_thr);
+    
+   // // update damage  
+   // _damage[_qp] += _dt * damage_dt;
+
+   //std::cout << _dt << "   ";
+  // std::cout << _viscosity[_qp] << "   ";
+  
+>>>>>>> 0cc4ee79c3f712d717b7dd0eb216d6d2283c81c1
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
 }

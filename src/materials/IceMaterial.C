@@ -97,6 +97,10 @@ IceMaterial::computeQpProperties()
   // Compute viscosity
   
   //_viscosity[_qp] = (0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.)) * 1e6; // MPa a
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   
   _viscosity[_qp] = (0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.)) * 3.15576e13 / 1e6; // 3.15576e13; // Pa s, ~ 2e14 at the beginning... (1e6 * 3.15576e7)
 
@@ -104,7 +108,11 @@ IceMaterial::computeQpProperties()
     _viscosity[_qp] = 10e12;
   
   
+<<<<<<< HEAD
   // std::cout << _pressure[_qp] << "  VISCOSITY  " << _viscosity[_qp] << " " << II_eps << std::endl; // should be around 10^12 Pa s
+=======
+  std::cout << _pressure[_qp] << "  VISCOSITY  " << _viscosity[_qp] << " " << II_eps << std::endl; // should be around 10^12 Pa s
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
 
   // std::cout << _t << std::endl;
   

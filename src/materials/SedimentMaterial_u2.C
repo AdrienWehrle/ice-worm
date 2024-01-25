@@ -113,8 +113,20 @@ SedimentMaterial_u2::computeQpProperties()
   //  1 pascal * second = 3.16887646 × 10-8 pascals * year
   // 10^12 Pa s = 31 688.7646 Pa * year = 0.0316887646 MPa * year
   
+<<<<<<< HEAD
   _viscosity[_qp] = 0.03 * 1e6; // ~ 10^12 Pa s
     
   // std::cout << "VISCOSITY  " <<  _viscosity[_qp] << std::endl;
+=======
+<<<<<<< HEAD
+  _viscosity[_qp] = 0.03 * 1e6; // ~ 10^12 Pa s
+    
+  // std::cout << "VISCOSITY  " <<  _viscosity[_qp] << std::endl;
+=======
+  _viscosity[_qp] = 0.03; // ~ 10^12 Pa s
+    
+  std::cout << "VISCOSITY  " <<  _viscosity[_qp] << std::endl;
+>>>>>>> 0cc4ee79c3f712d717b7dd0eb216d6d2283c81c1
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   
 }

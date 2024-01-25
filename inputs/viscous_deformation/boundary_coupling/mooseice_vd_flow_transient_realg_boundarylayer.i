@@ -89,6 +89,7 @@
     function = ocean_pressure
     displacements = 'velocity_x velocity_y velocity_z'
     []
+<<<<<<< HEAD
     [sediment_downstream_pressure]  
     boundary = downstream_sediment
     function = ocean_pressure
@@ -113,6 +114,45 @@
   #   boundary = 'sediment'
   #   value = 0.
   # []
+=======
+  []
+  # [bottom_boundary_x]
+  #   type = DirichletBC
+  #   variable = velocity_x
+  #   boundary = 'bottom'
+  #   value = 0.
+  # []
+  # [bottom_boundary_y]
+  #   type = DirichletBC
+  #   variable = velocity_y
+  #   boundary = 'bottom'
+  #   value = 0.
+  # []
+  # [bottom_boundary_z]
+  #   type = DirichletBC
+  #   variable = velocity_z
+  #   boundary = 'bottom'
+  #   value = 0.
+  # []
+  [sediment_boundary_x]
+    type = DirichletBC
+    variable = velocity_x
+    boundary = 'sediment'
+    value = 0.
+  []
+  [sediment_boundary_y]
+    type = DirichletBC
+    variable = velocity_y
+    boundary = 'sediment'
+    value = 0.
+  []
+  [sediment_boundary_z]
+    type = DirichletBC
+    variable = velocity_z
+    boundary = 'sediment'
+    value = 0.
+  []
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   [left_boundary_x]
     type = DirichletBC
     variable = velocity_x
@@ -131,6 +171,7 @@
     boundary = 'left'
     value = 0.
   []
+<<<<<<< HEAD
   # [left_sediment_boundary_x]
   #   type = DirichletBC
   #   variable = velocity_x
@@ -149,6 +190,8 @@
   #   boundary = 'left_sediment'
   #   value = 0.
   # []
+=======
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   [right_boundary_x]
     type = DirichletBC
     variable = velocity_x
@@ -167,6 +210,7 @@
     boundary = 'right'
     value = 0.
   []
+<<<<<<< HEAD
   # [right_sediment_boundary_x]
   #   type = DirichletBC
   #   variable = velocity_x
@@ -185,11 +229,35 @@
   #   boundary = 'right_sediment'
   #   value = 0.
   # []
+=======
+  # [downstream_boundary_x]
+  #   type = DirichletBC
+  #   variable = velocity_x
+  #   boundary = 'downstream'
+  #   value = -0.0000002 # 2.7e-4 # 1 m.h-1
+  # []
+  [downstream_boundary_y]
+    type = DirichletBC
+    variable = velocity_y
+    boundary = 'downstream'
+    value = 0.
+  []
+  [downstream_boundary_z]
+    type = DirichletBC
+    variable = velocity_z
+    boundary = 'downstream'
+    value = 0.
+  []
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   [upstream_boundary_x]
     type = DirichletBC
     variable = velocity_x
     boundary = 'upstream'
+<<<<<<< HEAD
     value = 0.000000001 # 2.7e-4 # 1 m.h-1 # 0.0000002
+=======
+    value = 0.00001 # 2.7e-4 # 1 m.h-1 # 0.0000002
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   []
   [upstream_boundary_y]
     type = DirichletBC
@@ -203,6 +271,7 @@
     boundary = 'upstream'
     value = 0.
   []
+<<<<<<< HEAD
   # [upstream_sediment_boundary_x]
   #   type = DirichletBC
   #   variable = velocity_x
@@ -240,6 +309,9 @@
   #   value = 0.
   # []
     
+=======
+        
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   # [Periodic]
   #   [all]
   #     variable = 'velocity_x velocity_y velocity_z'
@@ -289,6 +361,7 @@
   []
 []
 
+<<<<<<< HEAD
 # [Preconditioning]
 #   [andy]
 #     type = SMP
@@ -299,11 +372,16 @@
 [Executioner]
   type = Transient
   # type = Steady
+=======
+[Executioner]
+  type = Transient
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   petsc_options = '-ksp_snes_ew'
   petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
   petsc_options_value = 'lu       superlu_dist'
   solve_type = 'NEWTON'
   # nl_rel_tol = 1e-7
+<<<<<<< HEAD
   nl_rel_tol = 1e-2
   # nl_abs_tol = 1e-12
   nl_abs_tol = 1e-2
@@ -311,6 +389,15 @@
   # end_time = 864000 # 1 days in seconds
   # timestep_tolerance = 1e-6
   # automatic_scaling = true
+=======
+  nl_rel_tol = 1e-4
+  # nl_abs_tol = 1e-12
+  nl_abs_tol = 1e-4
+  dt = 86400 # one day in seconds
+  end_time = 864000 # 10 days in seconds
+  timestep_tolerance = 1e-6
+  automatic_scaling = true
+>>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   [TimeIntegrator]
     type = NewmarkBeta
     beta = 0.25
