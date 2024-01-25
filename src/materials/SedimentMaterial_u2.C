@@ -94,39 +94,18 @@ SedimentMaterial_u2::computeQpProperties()
   Real sxx_dev = 2 * eta * u_x;
   Real syy_dev = 2 * eta * v_y;
   Real szz_dev = 2 * eta * w_z;
-  
-  // left term
-  Real lt = (sxx+syy) / 2;
-  // right term containing root
-  Real rt = std::sqrt(pow((sxx-syy) / 2, 2) + sxy*sxy); 
-  Real s1 = lt + rt;
-  
+ 
   // von Mises stress (second invariant)
   Real sig_e = std::sqrt(3./2. * (sxx_dev*sxx_dev + syy_dev*syy_dev + 2*sxy*sxy));
   
   // Compute viscosity
   // _viscosity[_qp] = (_FrictionCoefficient * sig_m) / std::abs(sig_e); // Pa s
 
-  // if (_t == 864000)
-  //   _viscosity[_qp] = 1e4 * 1e6 * 3.15576e7 / 1e6; // Pa s
-
-  //  1 pascal * second = 3.16887646 × 10-8 pascals * year
-  // 10^12 Pa s = 31 688.7646 Pa * year = 0.0316887646 MPa * year
+  // Initial condition on viscosity (~10^12 Pas)
+  // if (_t <= 0.001)
+  //   _viscosity[_qp] = 0.03;
   
-<<<<<<< HEAD
-  _viscosity[_qp] = 0.03 * 1e6; // ~ 10^12 Pa s
-    
+  _viscosity[_qp] = 0.03; (~10^12 Pas)
   // std::cout << "VISCOSITY  " <<  _viscosity[_qp] << std::endl;
-=======
-<<<<<<< HEAD
-  _viscosity[_qp] = 0.03 * 1e6; // ~ 10^12 Pa s
-    
-  // std::cout << "VISCOSITY  " <<  _viscosity[_qp] << std::endl;
-=======
-  _viscosity[_qp] = 0.03; // ~ 10^12 Pa s
-    
-  std::cout << "VISCOSITY  " <<  _viscosity[_qp] << std::endl;
->>>>>>> 0cc4ee79c3f712d717b7dd0eb216d6d2283c81c1
->>>>>>> 1e794af8c06a6fad51903ef184721e2ff8c6c14e
   
 }
