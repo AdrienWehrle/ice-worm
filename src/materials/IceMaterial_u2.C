@@ -19,7 +19,12 @@ IceMaterial_u2::validParams()
   params.addParam<Real>("density", 917., "Ice density"); // kgm-3
   // params.addParam<Real>("damage", 0., "Ice damaging");
 
+<<<<<<< HEAD
+  // params.addParam<Real>("II_eps_min", 6.17e-6, "Finite strain rate parameter"); // a-1
+  params.addParam<Real>("II_eps_min", 5.98e-6, "Finite strain rate parameter"); // a-1
+=======
   params.addParam<Real>("II_eps_min", 6.17e-6, "Finite strain rate parameter"); // a-1
+>>>>>>> 0cc4ee79c3f712d717b7dd0eb216d6d2283c81c1
   
   // Damage law parameters
   params.addParam<Real>("r", 0.43, "Damage law exponent");
@@ -91,6 +96,22 @@ IceMaterial_u2::computeQpProperties()
   Real II_eps = 0.5*( u_x*u_x + v_y*v_y + w_z*w_z +
 		      2. * (eps_xy*eps_xy + eps_xz*eps_xz + eps_yz*eps_yz) );
 
+<<<<<<< HEAD
+  // Finite strain rate parameter included to avoid infinite viscosity at low stresses
+  if (II_eps < _II_eps_min)
+    II_eps = _II_eps_min;
+  
+  // Compute viscosity 
+  _viscosity[_qp] = (0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.)); // MPay
+
+  // Initial condition on viscosity (~10^12 Pas)
+  if (_t <= 0.001)
+    _viscosity[_qp] = 0.03;
+  
+  // Constant density
+  _density[_qp] = _rho;
+     
+=======
   // if (II_eps < _II_eps_min)
   //   II_eps = _II_eps_min;
   
@@ -154,4 +175,5 @@ IceMaterial_u2::computeQpProperties()
    //std::cout << _dt << "   ";
   // std::cout << _viscosity[_qp] << "   ";
   
+>>>>>>> 0cc4ee79c3f712d717b7dd0eb216d6d2283c81c1
 }
