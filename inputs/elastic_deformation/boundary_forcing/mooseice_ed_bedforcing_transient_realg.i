@@ -1,8 +1,8 @@
 [Mesh]
   [channel]
   type = FileMeshGenerator
-    file = /home/guschti/projects/mastodon/meshes/channel_10k_1und_ushape_surfboundary.e
-   # file = /home/adrien/COEBELI/projects/mastodon/meshes/channel_10k_1und_ushape_surfboundary.e
+    # file = /home/guschti/projects/mastodon/meshes/channel_10k_1und_ushape_surfboundary.e
+    file = /home/adrien/COEBELI/projects/mastodon/meshes/channel_10k_1und_ushape_surfboundary.e
   []
 []
 

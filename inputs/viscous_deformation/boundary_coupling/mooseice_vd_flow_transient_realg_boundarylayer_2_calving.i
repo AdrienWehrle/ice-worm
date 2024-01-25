@@ -5,11 +5,43 @@
   integrate_p_by_parts = true
 []
 
+# [Mesh]
+#   type = FileMesh
+#   file = /home/adrien/COEBELI/projects/mastodon/meshes/test_bed.e
+#   # displacements = 'disp_x disp_y disp_z'
+#   second_order = true
+# []
+
 [Mesh]
-  type = FileMesh
-  file = /home/adrien/COEBELI/projects/mastodon/meshes/mesh_before_calving.e
-  # displacements = 'disp_x disp_y disp_z'
-  second_order = true
+  
+  [channel]      
+    type = FileMesh
+    file = /home/adrien/COEBELI/projects/mastodon/meshes/test_bed.e
+    # displacements = 'disp_x disp_y disp_z'
+    second_order = true
+  []
+
+  [deactivated]      
+    type = FileMeshGenerator
+    file = /home/adrien/COEBELI/projects/mastodon/meshes/disabled_element.e
+  []
+
+  [combined]
+    type = CombinerGenerator
+    inputs = 'channel deactivated'
+  []
+
+  [final_mesh]
+    type = SubdomainBoundingBoxGenerator
+    input = combined
+    block_id = 255
+    block_name = deactivated
+    bottom_left = '-60 19950 -10'
+    top_right = '60 20100 60'
+  []
+
+  final_generator = final_mesh
+
 []
 
 
@@ -17,22 +49,22 @@
   [pressure]
     order = FIRST
     family = LAGRANGE
-    block = 'eleblock1 eleblock2 eleblock3'
+    block = 'eleblock1 eleblock2 eleblock3 eledeactivatedblock1'
   []
   [velocity_x]
     order = SECOND
     family = LAGRANGE
-    block = 'eleblock1 eleblock2 eleblock3'
+    block = 'eleblock1 eleblock2 eleblock3 eledeactivatedblock1'
   []
   [velocity_y]
     order = SECOND
     family = LAGRANGE
-    block = 'eleblock1 eleblock2 eleblock3'
+    block = 'eleblock1 eleblock2 eleblock3 eledeactivatedblock1'
   []
   [velocity_z]
     order = SECOND
     family = LAGRANGE
-    block = 'eleblock1 eleblock2 eleblock3'
+    block = 'eleblock1 eleblock2 eleblock3 eledeactivatedblock1'
   []
 []
 
@@ -44,7 +76,7 @@
     v = velocity_y
     w = velocity_z
     pressure = pressure
-    block = 'eleblock1 eleblock2 eleblock3'
+    block = 'eleblock1 eleblock2 eleblock3 eledeactivatedblock1'
   []
   [x_momentum_space]
     type = INSMomentumLaplaceForm
@@ -54,7 +86,7 @@
     w = velocity_z
     pressure = pressure
     component = 0
-    block = 'eleblock1 eleblock2 eleblock3'
+    block = 'eleblock1 eleblock2 eleblock3 eledeactivatedblock1'
   []
   [y_momentum_space]
     type = INSMomentumLaplaceForm
@@ -64,7 +96,7 @@
     w = velocity_z
     pressure = pressure
     component = 1
-    block = 'eleblock1 eleblock2 eleblock3'
+    block = 'eleblock1 eleblock2 eleblock3 eledeactivatedblock1'
   []
   [z_momentum_space]
     type = INSMomentumLaplaceForm
@@ -74,11 +106,12 @@
     w = velocity_z
     pressure = pressure
     component = 2
-    block = 'eleblock1 eleblock2 eleblock3'
+    block = 'eleblock1 eleblock2 eleblock3 eledeactivatedblock1'
   []
 []
 
 [BCs]
+
   [Pressure]
     [downstream_pressure]  
     boundary = downstream
@@ -91,6 +124,8 @@
     # displacements = 'velocity_x velocity_y velocity_z'
     # []
   []
+
+  # ice domain
   # [bottom_boundary_x]
   #   type = DirichletBC
   #   variable = velocity_x
@@ -145,24 +180,6 @@
     boundary = 'left'
     value = 0.
   []
-  [left_sediment_boundary_x]
-    type = DirichletBC
-    variable = velocity_x
-    boundary = 'left_sediment'
-    value = 0.
-  []
-  [left_sediment_boundary_y]
-    type = DirichletBC
-    variable = velocity_y
-    boundary = 'left_sediment'
-    value = 0.
-  []
-  [left_sediment_boundary_z]
-    type = DirichletBC
-    variable = velocity_z
-    boundary = 'left_sediment'
-    value = 0.
-  []
   [right_boundary_x]
     type = DirichletBC
     variable = velocity_x
@@ -179,24 +196,6 @@
     type = DirichletBC
     variable = velocity_z
     boundary = 'right'
-    value = 0.
-  []
-  [right_sediment_boundary_x]
-    type = DirichletBC
-    variable = velocity_x
-    boundary = 'right_sediment'
-    value = 0.
-  []
-  [right_sediment_boundary_y]
-    type = DirichletBC
-    variable = velocity_y
-    boundary = 'right_sediment'
-    value = 0.
-  []
-  [right_sediment_boundary_z]
-    type = DirichletBC
-    variable = velocity_z
-    boundary = 'right_sediment'
     value = 0.
   []
   # [downstream_boundary_x]
@@ -221,7 +220,7 @@
     type = DirichletBC
     variable = velocity_x
     boundary = 'upstream'
-    value = 5.6e-5 # 0.2 m.h-1
+    value = 2.7e-5 # 0.1 m.h-1 # 0.00001 # 2.7e-4 # 1 m.h-1 # 0.0000002
   []
   [upstream_boundary_y]
     type = DirichletBC
@@ -233,6 +232,44 @@
     type = DirichletBC
     variable = velocity_z
     boundary = 'upstream'
+    value = 0.
+  []
+
+  # sediment layer
+  [left_sediment_boundary_x]
+    type = DirichletBC
+    variable = velocity_x
+    boundary = 'left_sediment'
+    value = 0.
+  []
+  [left_sediment_boundary_y]
+    type = DirichletBC
+    variable = velocity_y
+    boundary = 'left_sediment'
+    value = 0.
+  []
+  [left_sediment_boundary_z]
+    type = DirichletBC
+    variable = velocity_z
+    boundary = 'left_sediment'
+    value = 0.
+  []
+  [right_sediment_boundary_x]
+    type = DirichletBC
+    variable = velocity_x
+    boundary = 'right_sediment'
+    value = 0.
+  []
+  [right_sediment_boundary_y]
+    type = DirichletBC
+    variable = velocity_y
+    boundary = 'right_sediment'
+    value = 0.
+  []
+  [right_sediment_boundary_z]
+    type = DirichletBC
+    variable = velocity_z
+    boundary = 'right_sediment'
     value = 0.
   []
   [upstream_sediment_boundary_x]
@@ -272,6 +309,98 @@
     value = 0.
   []
 
+  # deactivated element
+  [upstream_deactivated_boundary_x]
+    type = DirichletBC
+    variable = velocity_x
+    boundary = 'upstream_deactivated'
+    value = 0.
+  []
+  [upstream_deactivated_boundary_y]
+    type = DirichletBC
+    variable = velocity_y
+    boundary = 'upstream_deactivated'
+    value = 0.
+  []
+  [upstream_deactivated_boundary_z]
+    type = DirichletBC
+    variable = velocity_z
+    boundary = 'upstream_deactivated'
+    value = 0.
+  []
+  [downstream_deactivated_boundary_x]
+    type = DirichletBC
+    variable = velocity_x
+    boundary = 'downstream_deactivated'
+    value = 0.
+  []
+  [downstream_deactivated_boundary_y]
+    type = DirichletBC
+    variable = velocity_y
+    boundary = 'downstream_deactivated'
+    value = 0.
+  []
+  [downstream_deactivated_boundary_z]
+    type = DirichletBC
+    variable = velocity_z
+    boundary = 'downstream_deactivated'
+    value = 0.
+  []
+  [right_deactivated_boundary_x]
+    type = DirichletBC
+    variable = velocity_x
+    boundary = 'right_deactivated'
+    value = 0.
+  []
+  [right_deactivated_boundary_y]
+    type = DirichletBC
+    variable = velocity_y
+    boundary = 'right_deactivated'
+    value = 0.
+  []
+  [right_deactivated_boundary_z]
+    type = DirichletBC
+    variable = velocity_z
+    boundary = 'right_deactivated'
+    value = 0.
+  []
+  [left_deactivated_boundary_x]
+    type = DirichletBC
+    variable = velocity_x
+    boundary = 'left_deactivated'
+    value = 0.
+  []
+  [left_deactivated_boundary_y]
+    type = DirichletBC
+    variable = velocity_y
+    boundary = 'left_deactivated'
+    value = 0.
+  []
+  [left_deactivated_boundary_z]
+    type = DirichletBC
+    variable = velocity_z
+    boundary = 'left_deactivated'
+    value = 0.
+  []
+  [bottom_deactivated_boundary_x]
+    type = DirichletBC
+    variable = velocity_x
+    boundary = 'bottom_deactivated'
+    value = 0.
+  []
+  [bottom_deactivated_boundary_y]
+    type = DirichletBC
+    variable = velocity_y
+    boundary = 'bottom_deactivated'
+    value = 0.
+  []
+  [bottom_deactivated_boundary_z]
+    type = DirichletBC
+    variable = velocity_z
+    boundary = 'bottom_deactivated'
+    value = 0.
+  []
+
   # [Periodic]
   #   [all]
   #     variable = 'velocity_x velocity_y velocity_z'
@@ -305,7 +434,7 @@
 [Materials]
   [ice]
     type = IceMaterial
-    block = 'eleblock1 eleblock2'
+    block = 'eleblock1 eleblock2 eledeactivatedblock1'
     velocity_x = velocity_x
     velocity_y = velocity_y
     velocity_z = velocity_z

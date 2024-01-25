@@ -419,24 +419,24 @@ gravity_z = ${fparse
     variable = disp_x
     value    = 0.0
   []
-  [anchor_bottom_x]
-    type = DirichletBC
-    variable = disp_x
-    boundary = 'bottom'
-    value = 0.0
-  []  
-  [anchor_botom_y]
-    type = DirichletBC
-    variable = disp_y
-    boundary = 'bottom'
-    value = 0.0
-  []
-  [anchor_bottom_z]
-    type = DirichletBC
-    variable = disp_z
-    boundary = 'bottom'
-    value = 0.0
-  []
+  # [anchor_bottom_x]
+  #   type = DirichletBC
+  #   variable = disp_x
+  #   boundary = 'bottom'
+  #   value = 0.0
+  # []  
+  # [anchor_botom_y]
+  #   type = DirichletBC
+  #   variable = disp_y
+  #   boundary = 'bottom'
+  #   value = 0.0
+  # []
+  # [anchor_bottom_z]
+  #   type = DirichletBC
+  #   variable = disp_z
+  #   boundary = 'bottom'
+  #   value = 0.0
+  # []
 
   [anchor_sides_x]
     type = DirichletBC
@@ -474,12 +474,12 @@ gravity_z = ${fparse
   
 []
 
-[Preconditioning]
-  [andy]
-    type = SMP
-    full = true
-  []
-[]
+# [Preconditioning]
+#   [andy]
+#     type = SMP
+#     full = true
+#   []
+# []
 
 [Executioner]
   type = Transient

@@ -7,45 +7,12 @@
   integrate_p_by_parts = true
 []
 
-# [Mesh]
-#   type = GeneratedMesh
-#   dim = 3
-#   xmin = 0
-#   xmax = 10000.0
-#   ymin = 0
-#   ymax = 3000.0
-#   zmin = 0
-#   zmax = 1000.0
-#   nx = 12
-#   ny = 5
-#   nz = 10
-#   elem_type = HEX20
-#   # elem_type = QUAD9
-#   # displacements = 'velocity_x velocity_y velocity_z'
-# []
-
-# [Mesh]
-#   type = GeneratedMesh
-#   dim = 3
-#   xmin = 0
-#   xmax = 3.0
-#   ymin = 0
-#   ymax = 1.0
-#   zmin = 0
-#   zmax = 3.0
-#   nx = 5
-#   ny = 5
-#   nz = 5
-#   elem_type = HEX20
-#   # displacements = 'velocity_x velocity_y velocity_z'
-# []
-
 [Mesh]
   type = FileMesh
   # file = /home/guschti/projects/mastodon/meshes/simple_channel_straight_surface_slope.e
   file = /home/adrien/COEBELI/projects/mastodon/meshes/simple_channel_straight_surface_slope.e
   # file = /home/adrien/COEBELI/projects/mastodon/meshes/channel_10k_1und_ushape.e
-  displacements = 'disp_x disp_y disp_z'
+  # displacements = 'disp_x disp_y disp_z'
   second_order = true
 []
 
@@ -77,7 +44,7 @@
     v = velocity_y
     w = velocity_z
     pressure = pressure
-    # use_displaced_mesh = true
+    use_displaced_mesh = true
   []
   [x_momentum_space]
     type = INSMomentumLaplaceForm
@@ -87,7 +54,7 @@
     w = velocity_z
     pressure = pressure
     component = 0
-    # use_displaced_mesh = true
+    use_displaced_mesh = true
   []
   [y_momentum_space]
     type = INSMomentumLaplaceForm
@@ -97,7 +64,7 @@
     w = velocity_z
     pressure = pressure
     component = 1
-    # use_displaced_mesh = true
+    use_displaced_mesh = true
   []
   [z_momentum_space]
     type = INSMomentumLaplaceForm
@@ -107,7 +74,7 @@
     w = velocity_z
     pressure = pressure
     component = 2
-    # use_displaced_mesh = true
+    use_displaced_mesh = true
   []
 []
 
@@ -291,25 +258,39 @@
 #   # []
 # []
 
+
+[Contact]
+  [bottom_interface]
+    primary = "bottom"
+    secondary = "bottom"
+    model = coulomb
+    formulation = penalty
+    normalize_penalty = true
+    friction_coefficient = 0.5
+    penalty = 8e6
+    tangential_tolerance = 0.005
+  []
+[]
+
 [Executioner]
-  type = Steady
+  type = Transient
   petsc_options = '-ksp_snes_ew'
   petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
   petsc_options_value = 'lu       superlu_dist'
   solve_type = 'NEWTON'
-  nl_rel_tol = 1e-3
-  nl_abs_tol = 1e-3
+  nl_rel_tol = 1e-7
+  nl_abs_tol = 1e-12
+  dt = 86400 # one day in seconds
+  end_time = 864000 # 10 days in seconds
+  timestep_tolerance = 1e-6
   automatic_scaling = true
-  
   [TimeIntegrator]
     type = NewmarkBeta
     beta = 0.25
     gamma = 0.5
     inactive_tsteps = 2
   []
-  
 []
-
 
 [Outputs]
   interval = 1
