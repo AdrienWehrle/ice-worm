@@ -7,7 +7,7 @@
 
 [Mesh]
   type = FileMesh
-  file = /home/adrien/COEBELI/projects/mastodon/meshes/mesh_ac_lowerres.e
+  file = /home/guschti/projects/mastodon/meshes/mesh_ac_lowres.e
   # displacements = 'disp_x disp_y disp_z'
   second_order = true
 []
@@ -290,6 +290,11 @@
   end_time = 0.005 # in year, 0.005y ~= 44h
   timestep_tolerance = 1e-6
   automatic_scaling = true
+
+  # line_search = 'basic'
+  # petsc_options_iname = '-snes_linesearch_damping'
+  # petsc_options_value = '0.5'
+
   [TimeIntegrator]
     type = NewmarkBeta
     beta = 0.25
@@ -325,10 +330,14 @@
   
 []
 
-# [ICs]
-#   [pressure_weight]
-#     type = FunctionIC
-#     variable = 'pressure'
-#     function = weight
-#   []
-# []
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[ICs]
+  [pressure_weight]
+    type = FunctionIC
+    variable = 'pressure'
+    function = weight
+  []
+[]
