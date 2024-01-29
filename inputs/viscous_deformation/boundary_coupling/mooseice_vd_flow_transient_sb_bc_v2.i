@@ -7,7 +7,7 @@
 
 [Mesh]
   type = FileMesh
-  file = /home/guschti/projects/mastodon/meshes/mesh_ac_lowres.e
+  file = /home/guschti/projects/mastodon/meshes/mesh_ac_lowerres_flat.e
   # displacements = 'disp_x disp_y disp_z'
   second_order = true
 []
