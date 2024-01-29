@@ -99,8 +99,9 @@ IceMaterial_u2::computeQpProperties()
   _viscosity[_qp] = (0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.)); // MPay
 
   // Initial condition on viscosity (~10^12 Pas)
-  if (_t <= 0.001)
-    _viscosity[_qp] = 0.03;
+  // if (_t <= 0.001)
+  if (_t <= 864000)
+    _viscosity[_qp] = 10.e12; // 0.03
   
   // Constant density
   _density[_qp] = _rho;

@@ -7,7 +7,8 @@
 
 [Mesh]
   type = FileMesh
-  file = /home/guschti/projects/mastodon/meshes/mesh_ac_lowerres_flat.e
+  # file = /home/guschti/projects/mastodon/meshes/mesh_ac_lowerres_flat.e
+  file = /home/guschti/projects/mastodon/meshes/mesh_ac.e
   # displacements = 'disp_x disp_y disp_z'
   second_order = true
 []
@@ -85,11 +86,11 @@
     function = ocean_pressure
     displacements = 'velocity_x velocity_y velocity_z'
     []
-    [sediment_downstream_pressure]  
-    boundary = downstream_sediment
-    function = ocean_pressure
-    displacements = 'velocity_x velocity_y velocity_z'
-    []
+    # [sediment_downstream_pressure]  
+    # boundary = downstream_sediment
+    # function = ocean_pressure
+    # displacements = 'velocity_x velocity_y velocity_z'
+    # []
   []
   [sediment_boundary_x]
     type = DirichletBC
@@ -197,7 +198,7 @@
     type = DirichletBC
     variable = velocity_x
     boundary = 'upstream'
-    value = 1000. # 1000 = ~0.11 m.h-1
+    value = 2.7e-5 # ~0.1 m.h-1
   []
   [upstream_boundary_y]
     type = DirichletBC
@@ -286,8 +287,10 @@
   nl_rel_tol = 1e-3
   # nl_abs_tol = 1e-12
   nl_abs_tol = 1e-3
-  dt = 0.001 # in y, 0.001y ~= 9h
-  end_time = 0.005 # in year, 0.005y ~= 44h
+  # dt = 0.001 # in y, 0.001y ~= 9h
+  # end_time = 0.005 # in year, 0.005y ~= 44h
+  dt = 864000 # one day in seconds
+  end_time = 8640000 # 10 days in seconds
   timestep_tolerance = 1e-6
   automatic_scaling = true
 
@@ -321,11 +324,11 @@
 [Functions]
   [ocean_pressure]
     type = ParsedFunction
-    value = 'if(z < 0, -1028 * 9.81 * z * 1.e-6, 0)'
+    value = 'if(z < 0, -1028 * 9.81 * z, 0)'
   []
   [weight]
     type = ParsedFunction
-    value = '917 * 9.81 * (100-z) * 1e-6'
+    value = '917 * 9.81 * (100-z)'
   []
   
 []

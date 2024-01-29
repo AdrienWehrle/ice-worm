@@ -105,7 +105,7 @@ SedimentMaterial_u2::computeQpProperties()
   // if (_t <= 0.001)
   //   _viscosity[_qp] = 0.03;
   
-  _viscosity[_qp] = 0.03; // (~10^12 Pas)
+  _viscosity[_qp] = 10.e12; // 0.03 (~10^12 Pas)
   // std::cout << "VISCOSITY  " <<  _viscosity[_qp] << std::endl;
   
 }
