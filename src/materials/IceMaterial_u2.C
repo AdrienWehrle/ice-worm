@@ -14,13 +14,13 @@ IceMaterial_u2::validParams()
   params.addRequiredCoupledVar("pressure", "Mean stress");
   
   // Fluid properties
-  // params.addParam<Real>("AGlen", 75., "Fluidity parameter in Glen's flow law"); // MPa-3a-1
-  params.addParam<Real>("AGlen", 75. * 1e18 * 3.17e-08, "Fluidity parameter in Glen's flow law"); // Pa-3s-1
+  params.addParam<Real>("AGlen", 75., "Fluidity parameter in Glen's flow law"); // MPa-3a-1
+
   params.addParam<Real>("nGlen", 3.,"Glen exponent"); // 
   params.addParam<Real>("density", 917., "Ice density"); // kgm-3
   // params.addParam<Real>("damage", 0., "Ice damaging");
 
-  params.addParam<Real>("II_eps_min", 5.98e-6 * 3.17e-08, "Finite strain rate parameter"); // s-1
+  params.addParam<Real>("II_eps_min", 5.98e-6, "Finite strain rate parameter"); // a-1
   
   // Damage law parameters
   params.addParam<Real>("r", 0.43, "Damage law exponent");
@@ -97,15 +97,12 @@ IceMaterial_u2::computeQpProperties()
     II_eps = _II_eps_min;
   
   // Compute viscosity 
-  _viscosity[_qp] = (0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.)); // Pa s
+  _viscosity[_qp] = (0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.)); // MPa a
 
   // // Initial condition on viscosity (~10^12 Pas)
-  // if (_t <= _dt)
-  //   _viscosity[_qp] = 0.317; //  MPa a = ~ 10e12 Pa s
-
   if (_t <= _dt)
-    _viscosity[_qp] = 10e12; // 10e13 ice Pa s
-   
+    _viscosity[_qp] = 0.317; //  MPa a = ~ 10e12 Pa s
+
   if (_t > _dt)
       std::cout << _viscosity[_qp] << "  " << _pressure[_qp] << "  " << II_eps << std::endl;
   

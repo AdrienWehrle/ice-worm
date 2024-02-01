@@ -1,7 +1,7 @@
 # ------------------------ 
 
 [GlobalParams]
-  gravity = '0 0 -9.81'
+  gravity = '0 0 -0.00000981'
   integrate_p_by_parts = true
 []
 
@@ -198,7 +198,7 @@
     type = DirichletBC
     variable = velocity_x
     boundary = 'upstream'
-    value = 2.7e-5 # 0.000135 # 2.7e-5 * 5 ~0.5 m.h-1
+    value = 900. # ~0.1mh-1 # 2.7e-5 # 0.000135 # 2.7e-5 * 5 ~0.5 m.h-1
   []
   [upstream_boundary_y]
     type = DirichletBC
@@ -287,10 +287,10 @@
   nl_rel_tol = 1e-3
   # nl_abs_tol = 1e-12
   nl_abs_tol = 1e-3
-  # dt = 0.001 # in y, 0.001y ~= 9h
-  # end_time = 0.005 # in year, 0.005y ~= 44h
-  dt = 864000 # one day in seconds
-  end_time = 8640000 # 10 days in seconds
+  dt = 0.001 # in y, 0.001y ~= 9h
+  end_time = 0.005 # in year, 0.005y ~= 44h
+  # dt = 864000 # one day in seconds
+  # end_time = 8640000 # 10 days in seconds
   timestep_tolerance = 1e-6
   automatic_scaling = true
 
@@ -324,11 +324,11 @@
 [Functions]
   [ocean_pressure]
     type = ParsedFunction
-    value = 'if(z < 0, -1028 * 9.81 * z, 0)'
+    value = 'if(z < 0, -1028 * 9.81 * z * 1e-6, 0)'
   []
   [weight]
     type = ParsedFunction
-    value = '917 * 9.81 * (100-z)'
+    value = '917 * 9.81 * (100-z)  * 1e-6'
   []
   
 []
