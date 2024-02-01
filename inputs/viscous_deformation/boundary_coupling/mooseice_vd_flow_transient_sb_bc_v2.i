@@ -8,7 +8,7 @@
 [Mesh]
   type = FileMesh
   # file = /home/guschti/projects/mastodon/meshes/mesh_ac_lowerres_flat.e
-  file = /home/guschti/projects/mastodon/meshes/mesh_ac.e
+  file = /home/guschti/projects/mastodon/meshes/mesh_ac_lowerres.e
   # displacements = 'disp_x disp_y disp_z'
   second_order = true
 []
@@ -84,12 +84,12 @@
     [downstream_pressure]  
     boundary = downstream
     function = ocean_pressure
-    displacements = 'velocity_x velocity_y velocity_z'
+    displacements = 'velocity_x' # velocity_y velocity_z'
     []
     # [sediment_downstream_pressure]  
     # boundary = downstream_sediment
     # function = ocean_pressure
-    # displacements = 'velocity_x velocity_y velocity_z'
+    # displacements = 'velocity_x' # velocity_y velocity_z'
     # []
   []
   [sediment_boundary_x]
@@ -198,7 +198,7 @@
     type = DirichletBC
     variable = velocity_x
     boundary = 'upstream'
-    value = 2.7e-5 # ~0.1 m.h-1
+    value = 2.7e-5 # 0.000135 # 2.7e-5 * 5 ~0.5 m.h-1
   []
   [upstream_boundary_y]
     type = DirichletBC
@@ -270,12 +270,12 @@
   []
 []
 
-[Preconditioning]
-  [andy]
-    type = SMP
-    full = true
-  []
-[]
+# [Preconditioning]
+#   [andy]
+#     type = SMP
+#     full = true
+#   []
+# []
 
 [Executioner]
   type = Transient

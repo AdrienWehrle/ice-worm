@@ -101,11 +101,14 @@ SedimentMaterial_u2::computeQpProperties()
   // Compute viscosity
   // _viscosity[_qp] = (_FrictionCoefficient * sig_m) / std::abs(sig_e); // Pa s
 
-  // Initial condition on viscosity (~10^12 Pas)
-  // if (_t <= 0.001)
-  //   _viscosity[_qp] = 0.03;
-  
-  _viscosity[_qp] = 10.e12; // 0.03 (~10^12 Pas)
+  // // Initial condition on viscosity (~10^12 Pas)
+  // if (_t <= _dt)
+  //   _viscosity[_qp] = 0.317; //  MPa a = ~ 10e12 Pa s
+
+  // if (_t <= _dt)
+  _viscosity[_qp] = 10e5; // Pa s
+     
+  // _viscosity[_qp] = 10.e3; // ~10^12 Pas
   // std::cout << "VISCOSITY  " <<  _viscosity[_qp] << std::endl;
   
 }
