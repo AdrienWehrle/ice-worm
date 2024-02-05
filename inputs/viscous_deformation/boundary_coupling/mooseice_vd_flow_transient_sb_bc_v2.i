@@ -80,18 +80,18 @@
 []
 
 [BCs]
-  # [Pressure]
-  #   [downstream_pressure]  
-  #   boundary = downstream
-  #   function = ocean_pressure
-  #   displacements = 'velocity_x' # velocity_y velocity_z'
-  #   []
-  #   # [sediment_downstream_pressure]  
-  #   # boundary = downstream_sediment
-  #   # function = ocean_pressure
-  #   # displacements = 'velocity_x' # velocity_y velocity_z'
-  #   # []
-  # []
+  [Pressure]
+    [downstream_pressure]  
+    boundary = downstream
+    function = ocean_pressure
+    displacements = 'velocity_x' # velocity_y velocity_z'
+    []
+    [sediment_downstream_pressure]  
+    boundary = downstream_sediment
+    function = ocean_pressure
+    displacements = 'velocity_x' # velocity_y velocity_z'
+    []
+  []
   [sediment_boundary_x]
     type = DirichletBC
     variable = velocity_x
@@ -248,24 +248,24 @@
   #   boundary = 'downstream_sediment'
   #   value = 0.
 # []
-  [downstream__boundary_x]
-    type = DirichletBC
-    variable = velocity_x
-    boundary = 'downstream'
-    value = 0.
-  []
-  [downstream__boundary_y]
-    type = DirichletBC
-    variable = velocity_y
-    boundary = 'downstream'
-    value = 0.
-  []
-  [downstream__boundary_z]
-    type = DirichletBC
-    variable = velocity_z
-    boundary = 'downstream'
-    value = 0.
-  []
+  # [downstream__boundary_x]
+  #   type = DirichletBC
+  #   variable = velocity_x
+  #   boundary = 'downstream'
+  #   value = 0.
+  # []
+  # [downstream__boundary_y]
+  #   type = DirichletBC
+  #   variable = velocity_y
+  #   boundary = 'downstream'
+  #   value = 0.
+  # []
+  # [downstream__boundary_z]
+  #   type = DirichletBC
+  #   variable = velocity_z
+  #   boundary = 'downstream'
+  #   value = 0.
+  # []
 []
 
 [Materials]
