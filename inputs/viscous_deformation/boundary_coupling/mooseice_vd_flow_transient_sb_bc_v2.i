@@ -1,14 +1,14 @@
 # ------------------------ 
 
 [GlobalParams]
-  gravity = '0 0 -0.00000981'
+  gravity = '0 0 -9.81'
   integrate_p_by_parts = true
 []
 
 [Mesh]
   type = FileMesh
-  # file = /home/guschti/projects/mastodon/meshes/mesh_ac_lowerres_flat.e
-  file = /home/guschti/projects/mastodon/meshes/mesh_ac_lowerres.e
+  file = /home/guschti/projects/mastodon/meshes/mesh_ac_lowerres_flat.e
+  # file = /home/guschti/projects/mastodon/meshes/mesh_ac_lowerres.e
   # displacements = 'disp_x disp_y disp_z'
   second_order = true
 []
@@ -80,18 +80,18 @@
 []
 
 [BCs]
-  [Pressure]
-    [downstream_pressure]  
-    boundary = downstream
-    function = ocean_pressure
-    displacements = 'velocity_x' # velocity_y velocity_z'
-    []
-    # [sediment_downstream_pressure]  
-    # boundary = downstream_sediment
-    # function = ocean_pressure
-    # displacements = 'velocity_x' # velocity_y velocity_z'
-    # []
-  []
+  # [Pressure]
+  #   [downstream_pressure]  
+  #   boundary = downstream
+  #   function = ocean_pressure
+  #   displacements = 'velocity_x' # velocity_y velocity_z'
+  #   []
+  #   # [sediment_downstream_pressure]  
+  #   # boundary = downstream_sediment
+  #   # function = ocean_pressure
+  #   # displacements = 'velocity_x' # velocity_y velocity_z'
+  #   # []
+  # []
   [sediment_boundary_x]
     type = DirichletBC
     variable = velocity_x
@@ -198,7 +198,7 @@
     type = DirichletBC
     variable = velocity_x
     boundary = 'upstream'
-    value = 900. # ~0.1mh-1 # 2.7e-5 # 0.000135 # 2.7e-5 * 5 ~0.5 m.h-1
+    value = 0.
   []
   [upstream_boundary_y]
     type = DirichletBC
@@ -230,22 +230,40 @@
     boundary = 'upstream_sediment'
     value = 0.
   []
-  [downstream_sediment_boundary_x]
+  # [downstream_sediment_boundary_x]
+  #   type = DirichletBC
+  #   variable = velocity_x
+  #   boundary = 'downstream_sediment'
+  #   value = 0.
+  # []
+  # [downstream_sediment_boundary_y]
+  #   type = DirichletBC
+  #   variable = velocity_y
+  #   boundary = 'downstream_sediment'
+  #   value = 0.
+  # []
+  # [downstream_sediment_boundary_z]
+  #   type = DirichletBC
+  #   variable = velocity_z
+  #   boundary = 'downstream_sediment'
+  #   value = 0.
+# []
+  [downstream__boundary_x]
     type = DirichletBC
     variable = velocity_x
-    boundary = 'downstream_sediment'
+    boundary = 'downstream'
     value = 0.
   []
-  [downstream_sediment_boundary_y]
+  [downstream__boundary_y]
     type = DirichletBC
     variable = velocity_y
-    boundary = 'downstream_sediment'
+    boundary = 'downstream'
     value = 0.
   []
-  [downstream_sediment_boundary_z]
+  [downstream__boundary_z]
     type = DirichletBC
     variable = velocity_z
-    boundary = 'downstream_sediment'
+    boundary = 'downstream'
     value = 0.
   []
 []
@@ -277,6 +295,22 @@
 #   []
 # []
 
+# [Preconditioning]
+#   active = basic
+#   [mumps_is_best_for_parallel_jobs]
+#     type = SMP
+#     full = true
+#     petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
+#     petsc_options_value = ' lu       mumps'
+#   []
+#   [basic]
+#     type = SMP
+#     full = true
+#     petsc_options_iname = '-ksp_type -pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap'
+#     petsc_options_value = 'gmres      asm      lu           NONZERO                   2             '
+#   []
+# []
+
 [Executioner]
   type = Transient
   petsc_options = '-ksp_snes_ew'
@@ -284,9 +318,9 @@
   petsc_options_value = 'lu       superlu_dist'
   solve_type = 'NEWTON'
   # nl_rel_tol = 1e-7
-  nl_rel_tol = 1e-3
+  nl_rel_tol = 1e-4
   # nl_abs_tol = 1e-12
-  nl_abs_tol = 1e-3
+  nl_abs_tol = 1e-4
   dt = 0.001 # in y, 0.001y ~= 9h
   end_time = 0.005 # in year, 0.005y ~= 44h
   # dt = 864000 # one day in seconds
@@ -294,15 +328,11 @@
   timestep_tolerance = 1e-6
   automatic_scaling = true
 
-  # line_search = 'basic'
-  # petsc_options_iname = '-snes_linesearch_damping'
-  # petsc_options_value = '0.5'
-
   [TimeIntegrator]
     type = NewmarkBeta
     beta = 0.25
     gamma = 0.5
-    inactive_tsteps = 2
+    # inactive_tsteps = 2
   []
   # [TimeStepper]
   #   type = IterationAdaptiveDT
@@ -330,7 +360,12 @@
     type = ParsedFunction
     value = '917 * 9.81 * (100-z)  * 1e-6'
   []
-  
+
+  [velocity_depth]
+    type = ParsedFunction
+    value = '1000 * (1 - ((100 - z) / 1500))'
+
+  []
 []
 
 [Debug]
@@ -343,4 +378,9 @@
     variable = 'pressure'
     function = weight
   []
+  # [velocity_x_IC]
+  #   type = FunctionIC
+  #   variable = 'velocity_x'
+  #   function = velocity_depth
+  # []
 []

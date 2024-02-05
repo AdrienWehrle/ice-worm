@@ -15,7 +15,7 @@ SedimentMaterial_u2::validParams()
   
   // Solid properties
   // https://tc.copernicus.org/articles/14/261/2020/
-  params.addParam<Real>("density", 1850., "Sediment density"); // kgm-3
+  params.addParam<Real>("density", 1850. * 1e-6, "Sediment density"); // kgm-3
   params.addParam<Real>("II_eps_min", 6.17e-6, "Finite strain rate parameter"); // a-1
   
   // Friction properties
@@ -99,15 +99,13 @@ SedimentMaterial_u2::computeQpProperties()
   Real sig_e = std::sqrt(3./2. * (sxx_dev*sxx_dev + syy_dev*syy_dev + 2*sxy*sxy));
   
   // Compute viscosity
-  // _viscosity[_qp] = (_FrictionCoefficient * sig_m) / std::abs(sig_e); // Pa s
+  // _viscosity[_qp] = (_FrictionCoefficient * sig_m) / std::abs(sig_e); // MPa a
 
   // // Initial condition on viscosity (~10^12 Pas)
   // if (_t <= _dt)
-  //   _viscosity[_qp] = 0.317; //  MPa a = ~ 10e12 Pa s
-
-  // if (_t <= _dt)
-  _viscosity[_qp] = 10e5; // Pa s
-     
+  // _viscosity[_qp] = 0.317; //  MPa a = ~ 10e12 Pa s
+  _viscosity[_qp] = 3;
+   
   // _viscosity[_qp] = 10.e3; // ~10^12 Pas
   // std::cout << "VISCOSITY  " <<  _viscosity[_qp] << std::endl;
   
