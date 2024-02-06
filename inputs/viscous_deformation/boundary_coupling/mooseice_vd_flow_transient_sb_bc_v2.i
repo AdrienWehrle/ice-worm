@@ -9,6 +9,9 @@
   type = FileMesh
   file = /home/guschti/projects/mastodon/meshes/mesh_ac_lowerres_flat.e
   # file = /home/guschti/projects/mastodon/meshes/mesh_ac_lowerres.e
+  # file = /home/guschti/projects/mastodon/meshes/mesh_ac_lowres_flat.e
+  # file = /home/guschti/projects/mastodon/meshes/mesh_ac_flat.e
+  # file = /home/guschti/projects/mastodon/meshes/mesh_ac.e
   # displacements = 'disp_x disp_y disp_z'
   second_order = true
 []
@@ -194,11 +197,17 @@
     boundary = 'downstream'
     value = 0.
   []
-  [upstream_boundary_x]
+  [upstream_boundary_x_null]
     type = DirichletBC
     variable = velocity_x
     boundary = 'upstream'
     value = 0.
+  []
+  [upstream_boundary_x_influx]
+    type = DirichletBC
+    variable = velocity_x
+    boundary = 'upstream'
+    value = 10. # 0.
   []
   [upstream_boundary_y]
     type = DirichletBC
@@ -212,11 +221,17 @@
     boundary = 'upstream'
     value = 0.
   []
-  [upstream_sediment_boundary_x]
+  [upstream_sediment_boundary_x_null]
     type = DirichletBC
     variable = velocity_x
     boundary = 'upstream_sediment'
     value = 0.
+  []
+  [upstream_sediment_boundary_x_influx]
+    type = DirichletBC
+    variable = velocity_x
+    boundary = 'upstream_sediment'
+    value = 10. # 0.
   []
   [upstream_sediment_boundary_y]
     type = DirichletBC
@@ -247,7 +262,7 @@
   #   variable = velocity_z
   #   boundary = 'downstream_sediment'
   #   value = 0.
-# []
+  # []
   # [downstream__boundary_x]
   #   type = DirichletBC
   #   variable = velocity_x
@@ -288,28 +303,47 @@
   []
 []
 
-# [Preconditioning]
-#   [andy]
-#     type = SMP
-#     full = true
-#   []
-# []
+[Preconditioning]
+  [andy]
+    type = SMP
+    full = true
+  []
+[]
 
-# [Preconditioning]
-#   active = basic
-#   [mumps_is_best_for_parallel_jobs]
-#     type = SMP
-#     full = true
-#     petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
-#     petsc_options_value = ' lu       mumps'
-#   []
-#   [basic]
-#     type = SMP
-#     full = true
-#     petsc_options_iname = '-ksp_type -pc_type -sub_pc_type -sub_pc_factor_shift_type -pc_asm_overlap'
-#     petsc_options_value = 'gmres      asm      lu           NONZERO                   2             '
-#   []
-# []
+[Controls]
+  [null_ice_influx]
+    type = TimePeriod
+    start_time = 0.
+    end_time = 0.004
+    enable_objects = 'BCs::upstream_boundary_x_null'
+    set_sync_times = true
+    execute_on = 'timestep_begin timestep_end'
+  []
+  [ice_influx]
+    type = TimePeriod
+    start_time = 0.004
+    end_time = 20
+    enable_objects = 'BCs::upstream_boundary_x_influx'
+    set_sync_times = true
+    execute_on = 'timestep_begin timestep_end'
+  []
+  [null_sediment_influx]
+    type = TimePeriod
+    start_time = 0.
+    end_time = 0.004
+    enable_objects = 'BCs::upstream_sediment_boundary_x_null'
+    set_sync_times = true
+    execute_on = 'timestep_begin timestep_end'
+  []
+  [sediment_influx]
+    type = TimePeriod
+    start_time = 0.004
+    end_time = 20
+    enable_objects = 'BCs::upstream_sediment_boundary_x_influx'
+    set_sync_times = true
+    execute_on = 'timestep_begin timestep_end'
+  []
+[]
 
 [Executioner]
   type = Transient
@@ -338,7 +372,15 @@
   #   type = IterationAdaptiveDT
   #   dt = 0.001 # in y, 0.001y ~= 9h
   #   optimal_iterations = 10
-  # []
+# []
+  [Adaptivity]
+    interval = 1
+    refine_fraction = 0.5
+    coarsen_fraction = 0.3
+    max_h_level = 10
+    cycles_per_step = 5
+  []
+
 []
 
 [Outputs]
