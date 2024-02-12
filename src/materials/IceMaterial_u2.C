@@ -17,7 +17,7 @@ IceMaterial_u2::validParams()
   params.addParam<Real>("AGlen", 75., "Fluidity parameter in Glen's flow law"); // MPa-3a-1
 
   params.addParam<Real>("nGlen", 3.,"Glen exponent"); // 
-  params.addParam<Real>("density", 917. * 1e-6, "Ice density"); // kgm-3
+  params.addParam<Real>("density", 917., "Ice density"); // kgm-3
   // params.addParam<Real>("damage", 0., "Ice damaging");
 
   params.addParam<Real>("II_eps_min", 5.98e-6, "Finite strain rate parameter"); // a-1
@@ -84,7 +84,7 @@ IceMaterial_u2::computeQpProperties()
   Real w_y = _grad_velocity_z[_qp](1);
   Real w_z = _grad_velocity_z[_qp](2);
 
-  Real eps_xy = 0.5 * (u_y + v_x);                                                            
+  Real eps_xy = 0.5 * (u_y + v_x);                                             
   Real eps_xz = 0.5 * (u_z + w_x);
   Real eps_yz = 0.5 * (v_z + w_y); 
 
@@ -98,16 +98,19 @@ IceMaterial_u2::computeQpProperties()
   
   // Compute viscosity 
   _viscosity[_qp] = (0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.)); // MPa a
-
+  
   // // Initial condition on viscosity (~10^12 Pas)
   if (_t <= _dt)
   // _viscosity[_qp] = 0.317; //  MPa a = ~ 10e12 Pa s
-    _viscosity[_qp] = 30;
+    _viscosity[_qp] = 0.3;
+
+  // if (_t >= _dt)
+  //   std::cout << _viscosity[_qp] << "  " << _pressure[_qp] << "  " << II_eps << std::endl;
   
   _viscosity[_qp] = std::max(_viscosity[_qp], 0.0001);
   
-  if (_t >= 0.005)
-      std::cout << _viscosity[_qp] << "  " << _pressure[_qp] << "  " << II_eps << std::endl;
+  // if (_t >= 0.005)
+  //     std::cout << _viscosity[_qp] << "  " << _pressure[_qp] << "  " << II_eps << std::endl;
   
   // Constant density
   _density[_qp] = _rho;
