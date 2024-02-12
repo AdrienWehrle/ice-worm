@@ -3,7 +3,7 @@
 # ------------------------ 
 
 # slope of the bottom boundary (in degrees)
-bed_slope = 2
+bed_slope = 20
 
 # change coordinate system to add a slope
 gravity_x = ${fparse
@@ -13,8 +13,12 @@ gravity_z = ${fparse
 	      - cos(bed_slope / 180 * pi) * 9.81 * 1e-6
               } 
 
-width = 2
+length = 10000
+width = 2000
+thickness = 500
+
 inlet_amplitude = 1
+
 # ------------------------
 
 [GlobalParams]
@@ -26,13 +30,13 @@ inlet_amplitude = 1
   type = GeneratedMesh
   dim = 3
   xmin = 0
-  xmax = 6
+  xmax = '${length}'
   ymin = 0
   ymax = '${width}'
   zmin = 0
-  zmax = 1
+  zmax = '${thickness}'
   nx = 30
-  ny = 10
+  ny = 15
   nz = 5
   elem_type = HEX20
   
@@ -102,7 +106,7 @@ inlet_amplitude = 1
     [up_down]
       primary = left
       secondary = right
-      translation = '6 0 0'
+      translation = '${length} 0 0'
       variable = 'vel_x vel_y vel_z'
     []
   []
@@ -136,9 +140,8 @@ inlet_amplitude = 1
   [const]
     type = GenericConstantMaterial
     block = 0
-    prop_names = 'rho mu'
-    # prop_values = '917. 1e-3'
-    prop_values = '917. 0.3'
+    prop_names = 'rho mu' 
+    prop_values = '917. 30.'
   []
 []
 
@@ -151,14 +154,23 @@ inlet_amplitude = 1
 []
 
 [Executioner]
+
   type = Steady
   petsc_options_iname = '-ksp_gmres_restart -pc_type -sub_pc_type -sub_pc_factor_levels'
   petsc_options_value = '300                bjacobi  ilu          4'
   line_search = none
-  nl_rel_tol = 1e-12
+  automatic_scaling = true
+  
+  # nl_rel_tol = 1e-12
+  # nl_max_its = 6
+  # l_tol = 1e-6
+  # l_max_its = 300
+
+  nl_rel_tol = 1e-4
   nl_max_its = 6
-  l_tol = 1e-6
+  l_tol = 1e-4
   l_max_its = 300
+  
 []
 
 [Outputs]
@@ -170,6 +182,24 @@ inlet_amplitude = 1
 [Functions]
   [inlet_func]
     type = ParsedFunction
-    expression = '((-4 * ((y / ${width}) - 0.5)^2 + 1) * ${inlet_amplitude}) * z'
+    expression = '((-4 * ((y / ${width}) - 0.5)^2 + 1) * ${inlet_amplitude}) * (z/${thickness})'
   []
+
+  [weight]
+    type = ParsedFunction
+    value = '917 * 9.81 * 1e-6 * (${thickness}-z)'
+  []
+[]
+
+[ICs]
+  [pressure_weight]
+    type = FunctionIC
+    variable = p
+    function = weight
+  []
+  # [velocity_x_IC]
+  #   type = ConstantIC
+  #   variable = 'vel_x'
+  #   value = 1.
+  # []
 []
