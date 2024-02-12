@@ -141,7 +141,7 @@ inlet_amplitude = 1
     type = GenericConstantMaterial
     block = 0
     prop_names = 'rho mu' 
-    prop_values = '917. 30.'
+    prop_values = '917. 3.'
   []
 []
 
