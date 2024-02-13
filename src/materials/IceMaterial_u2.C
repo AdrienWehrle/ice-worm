@@ -95,24 +95,23 @@ IceMaterial_u2::computeQpProperties()
   // Finite strain rate parameter included to avoid infinite viscosity at low stresses
   if (II_eps < _II_eps_min)
     II_eps = _II_eps_min;
-  
+
   // Compute viscosity 
   _viscosity[_qp] = (0.5 * ApGlen * pow(II_eps, -(1.-1./_nGlen)/2.)); // MPa a
   
-  // // Initial condition on viscosity (~10^12 Pas)
-  if (_t <= _dt)
-  // _viscosity[_qp] = 0.317; //  MPa a = ~ 10e12 Pa s
-    _viscosity[_qp] = 0.3;
+  // // // Initial condition on viscosity (~10^12 Pas)
+  // if (_t <= _dt)
+  // // _viscosity[_qp] = 0.317; //  MPa a = ~ 10e12 Pa s
+  //   _viscosity[_qp] = 0.3;
 
   // if (_t >= _dt)
   //   std::cout << _viscosity[_qp] << "  " << _pressure[_qp] << "  " << II_eps << std::endl;
   
   _viscosity[_qp] = std::max(_viscosity[_qp], 0.0001);
-  
-  // if (_t >= 0.005)
-  //     std::cout << _viscosity[_qp] << "  " << _pressure[_qp] << "  " << II_eps << std::endl;
-  
+
   // Constant density
   _density[_qp] = _rho;
-     
+
+  // std::cout << _viscosity[_qp] << "  " << _pressure[_qp] << "  " << II_eps << std::endl;
+  
 }

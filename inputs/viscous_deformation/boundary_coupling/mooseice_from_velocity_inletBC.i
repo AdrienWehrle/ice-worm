@@ -1,9 +1,7 @@
-# This input file tests outflow boundary conditions for the incompressible NS equations.
-
 # ------------------------ 
 
 # slope of the bottom boundary (in degrees)
-bed_slope = 20
+bed_slope = 5
 
 # change coordinate system to add a slope
 gravity_x = ${fparse
@@ -13,11 +11,12 @@ gravity_z = ${fparse
 	      - cos(bed_slope / 180 * pi) * 9.81 * 1e-6
               } 
 
+# geometry of the ice slab
 length = 10000
 width = 2000
 thickness = 500
 
-inlet_amplitude = 1
+# inlet_amplitude = 1
 
 # ------------------------
 
@@ -137,11 +136,19 @@ inlet_amplitude = 1
 []
 
 [Materials]
-  [const]
-    type = GenericConstantMaterial
+  # [const]
+  #   type = GenericConstantMaterial
+  #   block = 0
+  #   prop_names = 'rho mu' 
+  #   prop_values = '917. 3.'
+  # []
+  [ice]
+    type = IceMaterial_u2
     block = 0
-    prop_names = 'rho mu' 
-    prop_values = '917. 3.'
+    velocity_x = "vel_x"
+    velocity_y = "vel_y"
+    velocity_z = "vel_z"
+    pressure = "p"
   []
 []
 
@@ -180,11 +187,10 @@ inlet_amplitude = 1
 []
 
 [Functions]
-  [inlet_func]
-    type = ParsedFunction
-    expression = '((-4 * ((y / ${width}) - 0.5)^2 + 1) * ${inlet_amplitude}) * (z/${thickness})'
-  []
-
+  # [inlet_func]
+  #   type = ParsedFunction
+  #   expression = '((-4 * ((y / ${width}) - 0.5)^2 + 1) * ${inlet_amplitude}) * (z/${thickness})'
+  # []
   [weight]
     type = ParsedFunction
     value = '917 * 9.81 * 1e-6 * (${thickness}-z)'
