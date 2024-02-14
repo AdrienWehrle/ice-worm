@@ -63,7 +63,7 @@ thickness = 500
 
 [Kernels]
   [mass]
-    type = INSADMass
+    type = INSMass
     variable = p
     u = vel_x
     v = vel_y

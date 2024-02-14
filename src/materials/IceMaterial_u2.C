@@ -5,7 +5,7 @@ registerMooseObject("MastodonApp", IceMaterial_u2);
 InputParameters
 IceMaterial_u2::validParams()
 {
-  InputParameters params = ADMaterial::validParams();
+  InputParameters params = Material::validParams();
 
   // Get velocity gradients to compute viscosity based on the effective strain rate
   params.addRequiredCoupledVar("velocity_x", "Velocity in x dimension");
@@ -14,53 +14,53 @@ IceMaterial_u2::validParams()
   params.addRequiredCoupledVar("pressure", "Mean stress");
   
   // Fluid properties
-  params.addParam<ADReal>("AGlen", 75., "Fluidity parameter in Glen's flow law"); // MPa-3a-1
+  params.addParam<Real>("AGlen", 75., "Fluidity parameter in Glen's flow law"); // MPa-3a-1
 
-  params.addParam<ADReal>("nGlen", 3.,"Glen exponent"); // 
-  params.addParam<ADReal>("density", 917., "Ice density"); // kgm-3
-  // params.addParam<ADReal>("damage", 0., "Ice damaging");
+  params.addParam<Real>("nGlen", 3.,"Glen exponent"); // 
+  params.addParam<Real>("density", 917., "Ice density"); // kgm-3
+  // params.addParam<Real>("damage", 0., "Ice damaging");
 
-  params.addParam<ADReal>("II_eps_min", 5.98e-6, "Finite strain rate parameter"); // a-1
+  params.addParam<Real>("II_eps_min", 5.98e-6, "Finite strain rate parameter"); // a-1
   
   // Damage law parameters
-  params.addParam<ADReal>("r", 0.43, "Damage law exponent");
-  params.addParam<ADReal>("B", 1., "Damage rate");  
-  params.addParam<ADReal>("sig_th", 0., "Damage threshold stress");
-  params.addParam<ADReal>("alpha", 1., "Linear combination parameter on von Mises stresses");
+  params.addParam<Real>("r", 0.43, "Damage law exponent");
+  params.addParam<Real>("B", 1., "Damage rate");  
+  params.addParam<Real>("sig_th", 0., "Damage threshold stress");
+  params.addParam<Real>("alpha", 1., "Linear combination parameter on von Mises stresses");
   
   return params;
 }
 
 IceMaterial_u2::IceMaterial_u2(const InputParameters & parameters)
-  : ADMaterial(parameters),
+  : Material(parameters),
 
     // Glen parameters
-    _AGlen(getParam<ADReal>("AGlen")),
-    _nGlen(getParam<ADReal>("nGlen")),
+    _AGlen(getParam<Real>("AGlen")),
+    _nGlen(getParam<Real>("nGlen")),
     
     // Ice density
-    _rho(getParam<ADReal>("density")),
+    _rho(getParam<Real>("density")),
     
     // Velocity gradients
     _grad_velocity_x(coupledGradient("velocity_x")),
     _grad_velocity_y(coupledGradient("velocity_y")),
     _grad_velocity_z(coupledGradient("velocity_z")),
 
-    _II_eps_min(getParam<ADReal>("II_eps_min")),
+    _II_eps_min(getParam<Real>("II_eps_min")),
 
     // Mean stress
     _pressure(coupledValue("pressure")),
 
     // Damage law parameters
-    // _r(getParam<ADReal>("r")),
-    // _B(getParam<ADReal>("B")),
-    // _sig_th(getParam<ADReal>("sig_th")),
-    // _alpha(getParam<ADReal>("alpha")),
+    // _r(getParam<Real>("r")),
+    // _B(getParam<Real>("B")),
+    // _sig_th(getParam<Real>("sig_th")),
+    // _alpha(getParam<Real>("alpha")),
 
     // Ice properties created by this object
-    _viscosity(declareADProperty<ADReal>("mu")),
-    _density(declareADProperty<ADReal>("rho"))
-    // _damage(declareProperty<ADReal>("damage"))
+    _viscosity(declareProperty<Real>("mu")),
+    _density(declareProperty<Real>("rho"))
+    // _damage(declareProperty<Real>("damage"))
 {
 }
 
@@ -69,27 +69,27 @@ IceMaterial_u2::computeQpProperties()
 {
 
   // Wrap term with Glen's fluidity parameter for clarity
-  ADReal ApGlen  = pow(_AGlen, -1./ _nGlen);
+  Real ApGlen  = pow(_AGlen, -1./ _nGlen);
 
   // Get current velocity gradients at quadrature point
-  ADReal u_x = _grad_velocity_x[_qp](0);
-  ADReal u_y = _grad_velocity_x[_qp](1);
-  ADReal u_z = _grad_velocity_x[_qp](2);
+  Real u_x = _grad_velocity_x[_qp](0);
+  Real u_y = _grad_velocity_x[_qp](1);
+  Real u_z = _grad_velocity_x[_qp](2);
   
-  ADReal v_x = _grad_velocity_y[_qp](0);
-  ADReal v_y = _grad_velocity_y[_qp](1);
-  ADReal v_z = _grad_velocity_y[_qp](2);
+  Real v_x = _grad_velocity_y[_qp](0);
+  Real v_y = _grad_velocity_y[_qp](1);
+  Real v_z = _grad_velocity_y[_qp](2);
 
-  ADReal w_x = _grad_velocity_z[_qp](0);
-  ADReal w_y = _grad_velocity_z[_qp](1);
-  ADReal w_z = _grad_velocity_z[_qp](2);
+  Real w_x = _grad_velocity_z[_qp](0);
+  Real w_y = _grad_velocity_z[_qp](1);
+  Real w_z = _grad_velocity_z[_qp](2);
 
-  ADReal eps_xy = 0.5 * (u_y + v_x);                                             
-  ADReal eps_xz = 0.5 * (u_z + w_x);
-  ADReal eps_yz = 0.5 * (v_z + w_y); 
+  Real eps_xy = 0.5 * (u_y + v_x);                                             
+  Real eps_xz = 0.5 * (u_z + w_x);
+  Real eps_yz = 0.5 * (v_z + w_y); 
 
   // Compute effective strain rate (3D)
-  ADReal II_eps = 0.5*( u_x*u_x + v_y*v_y + w_z*w_z +
+  Real II_eps = 0.5*( u_x*u_x + v_y*v_y + w_z*w_z +
 		      2. * (eps_xy*eps_xy + eps_xz*eps_xz + eps_yz*eps_yz) );
 
   // Finite strain rate parameter included to avoid infinite viscosity at low stresses

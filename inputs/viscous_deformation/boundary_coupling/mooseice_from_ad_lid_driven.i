@@ -20,10 +20,10 @@ thickness = 500
 
 # ------------------------
 
-[GlobalParams]
-  gravity = '${gravity_x} 0. ${gravity_z}'
-  # integrate_p_by_parts = true
-[]
+# [GlobalParams]
+  
+#   # integrate_p_by_parts = true
+# []
 
 [Mesh]
   type = GeneratedMesh
@@ -66,6 +66,10 @@ thickness = 500
     order = SECOND
     family = LAGRANGE
   []
+  [T]
+    order = SECOND
+    family = LAGRANGE
+  []
 []
 
 [AuxKernels]
@@ -87,21 +91,17 @@ thickness = 500
     vector_variable = velocity
     component = 'z'
   []
+  [T]
+    type = ConstantAux
+    variable = T
+  []
 []
 
 [Kernels]
   [mass]
     type = INSADMass
     variable = p
-    u = vel_x
-    v = vel_y
-    w = vel_z
-    pressure = p
   []
-  # [momentum_time]
-  #   type = INSADMomentumTimeDerivative
-  #   variable = velocity
-  # []
   [momentum_convection]
     type = INSADMomentumAdvection
     variable = velocity
@@ -117,6 +117,12 @@ thickness = 500
     variable = velocity
     pressure = p
     integrate_p_by_parts = true
+  []
+
+  [gravity]
+    type = INSADGravityForce
+    variable = velocity
+    gravity = '${gravity_x} 0. ${gravity_z}'
   []
 []
 
@@ -149,20 +155,26 @@ thickness = 500
 []
 
 [Materials]
-  [const]
-    type = ADGenericConstantMaterial
-    block = 0
-    prop_names = 'rho mu' 
-    prop_values = '917. 3.'
-  []
-  # [ice]
-  #   type = IceMaterial_u2
+  # [const]
+  #   type = ADGenericConstantMaterial
   #   block = 0
-  #   velocity_x = "vel_x"
-  #   velocity_y = "vel_y"
-  #   velocity_z = "vel_z"
-  #   pressure = "p"
+  #   prop_names = 'rho mu cp k' 
+  #   prop_values = '917. 30. 1. 1.'
   # []
+  [ins_mat]
+    type = INSAD3Eqn
+    velocity = velocity
+    pressure = p
+    temperature = T
+  []
+  [ice]
+    type = IceMaterial_u2_ad
+    block = 0
+    velocity_x = "vel_x"
+    velocity_y = "vel_y"
+    velocity_z = "vel_z"
+    pressure = "p"
+  []
 []
 
 [Preconditioning]
@@ -178,6 +190,7 @@ thickness = 500
   type = Steady
   petsc_options_iname = '-ksp_gmres_restart -pc_type -sub_pc_type -sub_pc_factor_levels'
   petsc_options_value = '300                bjacobi  ilu          4'
+
   line_search = none
   automatic_scaling = true
   
