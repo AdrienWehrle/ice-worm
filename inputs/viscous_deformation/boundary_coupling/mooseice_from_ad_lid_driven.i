@@ -107,10 +107,10 @@ thickness = 500
     variable = velocity
   []
 
-  # [momentum_viscous]
-  #   type = INSADMomentumViscous
-  #   variable = velocity
-  # []
+  [momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  []
 
   [momentum_pressure]
     type = INSADMomentumPressure
