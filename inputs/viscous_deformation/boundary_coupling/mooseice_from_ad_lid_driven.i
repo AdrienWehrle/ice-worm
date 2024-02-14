@@ -135,6 +135,9 @@ thickness = 500
     type = ADVectorFunctionDirichletBC
     variable = velocity
     boundary = 'back top bottom'
+    function_x = 0
+    function_y = 0
+    function_z = 0
   []
 
   # [x_inlet]
