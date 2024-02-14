@@ -43,6 +43,17 @@ thickness = 500
 
 
 [Variables]
+  [velocity]
+    order = SECOND
+    family = LAGRANGE_VEC
+  []
+  [p]
+    order = FIRST
+    family = LAGRANGE
+  []
+[]
+
+[AuxVariables]
   [vel_x]
     order = SECOND
     family = LAGRANGE
@@ -55,9 +66,26 @@ thickness = 500
     order = SECOND
     family = LAGRANGE
   []
-  [p]
-    order = FIRST
-    family = LAGRANGE
+[]
+
+[AuxKernels]
+  [vel_x]
+    type = VectorVariableComponentAux
+    variable = vel_x
+    vector_variable = velocity
+    component = 'x'
+  []
+  [vel_y]
+    type = VectorVariableComponentAux
+    variable = vel_y
+    vector_variable = velocity
+    component = 'y'
+  []
+  [vel_z]
+    type = VectorVariableComponentAux
+    variable = vel_z
+    vector_variable = velocity
+    component = 'z'
   []
 []
 
@@ -70,32 +98,25 @@ thickness = 500
     w = vel_z
     pressure = p
   []
-  [x_momentum_space]
-    type = INSMomentumLaplaceForm
-    variable = vel_x
-    u = vel_x
-    v = vel_y
-    w = vel_z
-    pressure = p
-    component = 0
+  [momentum_time]
+    type = INSADMomentumTimeDerivative
+    variable = velocity
   []
-  [y_momentum_space]
-    type = INSMomentumLaplaceForm
-    variable = vel_y
-    u = vel_x
-    v = vel_y
-    w = vel_z
-    pressure = p
-    component = 1
+  [momentum_convection]
+    type = INSADMomentumAdvection
+    variable = velocity
   []
-  [z_momentum_space]
-    type = INSMomentumLaplaceForm
-    variable = vel_z
-    u = vel_x
-    v = vel_y
-    w = vel_z
+
+  [momentum_viscous]
+    type = INSADMomentumViscous
+    variable = velocity
+  []
+
+  [momentum_pressure]
+    type = INSADMomentumPressure
+    variable = velocity
     pressure = p
-    component = 2
+    integrate_p_by_parts = true
   []
 []
 
@@ -136,20 +157,20 @@ thickness = 500
 []
 
 [Materials]
-  # [const]
-  #   type = GenericConstantMaterial
-  #   block = 0
-  #   prop_names = 'rho mu' 
-  #   prop_values = '917. 3.'
-  # []
-  [ice]
-    type = IceMaterial_u2
+  [const]
+    type = GenericConstantMaterial
     block = 0
-    velocity_x = "vel_x"
-    velocity_y = "vel_y"
-    velocity_z = "vel_z"
-    pressure = "p"
+    prop_names = 'rho mu' 
+    prop_values = '917. 3.'
   []
+  # [ice]
+  #   type = IceMaterial_u2
+  #   block = 0
+  #   velocity_x = "vel_x"
+  #   velocity_y = "vel_y"
+  #   velocity_z = "vel_z"
+  #   pressure = "p"
+  # []
 []
 
 [Preconditioning]

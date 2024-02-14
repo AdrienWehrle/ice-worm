@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Material.h"
+#include "ADMaterial.h"
 
 /**
  * Material objects inherit from Material and override computeQpProperties.
@@ -8,7 +8,7 @@
  * Their job is to declare properties for use by other objects in the
  * calculation such as Kernels and BoundaryConditions.
  */
-class IceMaterial_u2 : public Material
+class IceMaterial_u2 : public ADMaterial
 {
 public:
   static InputParameters validParams();
@@ -20,13 +20,13 @@ protected:
   virtual void computeQpProperties() override;
   
   /// The density of the fluid (rho)
-  MaterialProperty<Real> & _density; 
+  ADMaterialProperty<ADReal> & _density; 
 
   /// The viscosity of the fluid (mu)
-  MaterialProperty<Real> & _viscosity;
+  ADMaterialProperty<ADReal> & _viscosity;
 
   /// Ice damaging
-  // MaterialProperty<Real> & _damage;
+  // MaterialProperty<ADReal> & _damage;
   
   // Velocity gradients
   const VariableGradient & _grad_velocity_x;
@@ -35,15 +35,15 @@ protected:
   const VariableValue & _pressure;
 
   // Glen parameters
-  const Real & _AGlen;
-  const Real & _nGlen;
-  const Real & _rho;
-  const Real & _II_eps_min;
+  const ADReal & _AGlen;
+  const ADReal & _nGlen;
+  const ADReal & _rho;
+  const ADReal & _II_eps_min;
 
   // Damage law parameters
-  // const Real & _r;
-  // const Real & _B;
-  // const Real & _sig_th;
-  // const Real & _alpha;
+  // const ADReal & _r;
+  // const ADReal & _B;
+  // const ADReal & _sig_th;
+  // const ADReal & _alpha;
 
 };
