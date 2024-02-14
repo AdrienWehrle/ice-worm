@@ -98,19 +98,19 @@ thickness = 500
     w = vel_z
     pressure = p
   []
-  [momentum_time]
-    type = INSADMomentumTimeDerivative
-    variable = velocity
-  []
+  # [momentum_time]
+  #   type = INSADMomentumTimeDerivative
+  #   variable = velocity
+  # []
   [momentum_convection]
     type = INSADMomentumAdvection
     variable = velocity
   []
 
-  [momentum_viscous]
-    type = INSADMomentumViscous
-    variable = velocity
-  []
+  # [momentum_viscous]
+  #   type = INSADMomentumViscous
+  #   variable = velocity
+  # []
 
   [momentum_pressure]
     type = INSADMomentumPressure
@@ -127,27 +127,16 @@ thickness = 500
       primary = left
       secondary = right
       translation = '${length} 0 0'
-      variable = 'vel_x vel_y vel_z'
+      variable = 'velocity'
     []
   []
-  [x_no_slip]
-    type = DirichletBC
-    variable = vel_x
+
+  [no_slip]
+    type = ADVectorFunctionDirichletBC
+    variable = velocity
     boundary = 'back top bottom'
-    value = 0.0
   []
-  [y_no_slip]
-    type = DirichletBC
-    variable = vel_y
-    boundary = 'back top bottom'
-    value = 0.0
-  []
-  [z_no_slip]
-    type = DirichletBC
-    variable = vel_z
-    boundary = 'back top bottom'
-    value = 0.0
-  []
+
   # [x_inlet]
   #   type = FunctionDirichletBC
   #   variable = vel_x
@@ -158,7 +147,7 @@ thickness = 500
 
 [Materials]
   [const]
-    type = GenericConstantMaterial
+    type = ADGenericConstantMaterial
     block = 0
     prop_names = 'rho mu' 
     prop_values = '917. 3.'
