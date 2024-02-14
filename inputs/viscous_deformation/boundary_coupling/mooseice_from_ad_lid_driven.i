@@ -161,12 +161,6 @@ thickness = 500
   #   prop_names = 'rho mu cp k' 
   #   prop_values = '917. 30. 1. 1.'
   # []
-  [ins_mat]
-    type = INSAD3Eqn
-    velocity = velocity
-    pressure = p
-    temperature = T
-  []
   [ice]
     type = IceMaterial_u2_ad
     block = 0
@@ -174,6 +168,12 @@ thickness = 500
     velocity_y = "vel_y"
     velocity_z = "vel_z"
     pressure = "p"
+  []
+  [ins_mat]
+    type = INSAD3Eqn
+    velocity = velocity
+    pressure = p
+    temperature = T
   []
 []
 
